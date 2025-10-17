@@ -1,4 +1,5 @@
 package src.Routing;
+
 public class RoutingManagementApplication implements RoutingProtocolManagementServiceUserInterface {
     private RoutingProtocolManagementInterface routingManagement;
 
@@ -7,9 +8,9 @@ public class RoutingManagementApplication implements RoutingProtocolManagementSe
         this.routingManagement = routingManagement;
     }
 
-    public void distanceTableIndication(short i, int[][] matrix) {
+    public void distanceTableIndication(short node, int[][] table) {
     }
 
-    public void linkCostIndication(short i, short j, int cost) {
+    public void linkCostIndication(short nodeA, short nodeB, int cost) {
     }
 }

@@ -17,15 +17,15 @@ public class RoutingInformationProtocol implements UnicastServiceUserInterface, 
     public void UPDataInd(short source, String message) {
     }
 
-    public boolean getDistanceTable(short i) {
+    public boolean getDistanceTable(short node) {
         return true;
     }
 
-    public boolean getLinkCost(short i, short j) {
+    public boolean getLinkCost(short nodeA, short nodeB) {
         return true;
     }
 
-    public boolean setLinkCost(short i, short j, int cost) {
+    public boolean setLinkCost(short nodeA, short nodeB, int cost) {
         return true;
     }
 }
