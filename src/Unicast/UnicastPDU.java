@@ -1,28 +1,40 @@
 package src.Unicast;
+
 import java.util.regex.Pattern;
+
+import src.Unicast.Exception.InvalidPDUException;
+import src.Unicast.Exception.InvalidPDUFormatException;
+import src.Unicast.Exception.InvalidPDUSizeException;
 
 public class UnicastPDU {
 
-    final int sizeInBytes = 1024;
-    String data;
+    private final int sizeInBytes = 1024;
+    private String message;
+    private byte[] buffer;
 
-    public UnicastPDU(String data) {
-        this.data = data;
+    public UnicastPDU(String message) throws InvalidPDUException {
+        this.message = message;
+        this.buffer = message.getBytes();
+
+        verifyMessage();
     }
 
-    public boolean isValid() {
-        if (this.data == null) {
-            return false;
+    public byte[] getMessageBytes() {
+        return buffer;
+    }
+
+    public void verifyMessage() throws InvalidPDUException {
+        if (this.message == null) {
+            throw new InvalidPDUFormatException("[INVALID FORMAT]: PDU IS NULL");
         }
 
-        if (this.data.length() > sizeInBytes) {
-            return false;
+        if (this.message.length() > sizeInBytes) {
+            throw new InvalidPDUSizeException(this.message.length());
         }
 
-        if (!Pattern.matches("UPDREQPDU \\d+ .+", this.data)) {
-            return false;
+        if (!Pattern.matches("UPDREQPDU \\d+ .+", this.message)) {
+            throw new InvalidPDUFormatException(
+                    "[INVALID FORMAT]: PDU SHOULD HAVE DE FORMAT <UPDREQPDU><space><data_size><space><data>");
         }
-
-        return true;
     }
 }
