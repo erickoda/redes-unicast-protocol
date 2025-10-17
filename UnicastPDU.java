@@ -1,3 +1,6 @@
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class UnicastPDU {
 
     final int sizeInBytes = 1024;
@@ -16,6 +19,10 @@ public class UnicastPDU {
             return false;
         }
 
-        return data != null && this.data.length() > 0;
+        if (!Pattern.matches("UPDREQPDU \\d+ .+", this.data)) {
+            return false;
+        }
+
+        return true;
     }
 }
