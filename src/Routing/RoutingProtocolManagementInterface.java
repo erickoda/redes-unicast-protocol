@@ -1,3 +1,4 @@
+package src.Routing;
 public interface RoutingProtocolManagementInterface {
     public boolean getDistanceTable(short i);
 
