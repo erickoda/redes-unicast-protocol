@@ -13,7 +13,7 @@ public class UnicastAddressSingleton {
         UnicastAddressSingleton.unicastAddresses = unicastAddresses;
     }
 
-    public static Optional<UnicastAddress> getUnicastAddressFrom(short id) {
+    public static synchronized Optional<UnicastAddress> getUnicastAddressFrom(short id) {
         if (unicastAddresses == null) {
             return Optional.empty();
         }
