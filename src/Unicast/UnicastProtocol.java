@@ -15,6 +15,14 @@ public class UnicastProtocol implements UnicastServerInterface {
     public UnicastProtocol() {
     }
 
+    public UnicastServiceUserInterface getUserService() {
+        return userService;
+    }
+
+    public void setUserService(UnicastServiceUserInterface userService) {
+        this.userService = userService;
+    }
+
     @Override
     public boolean UPDataReq(short destination, String message) {
         int portNumber;
