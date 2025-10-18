@@ -8,6 +8,7 @@ import java.util.Optional;
 import src.Unicast.UnicastAddress;
 import src.Unicast.UnicastAddressSingleton;
 import src.Unicast.UnicastPDU;
+import src.Unicast.UnicastReceivedMessagesSingleton;
 import src.Unicast.UnicastServerInterface;
 import src.Unicast.UnicastServiceUserInterface;
 import src.Unicast.Exception.InvalidPDUException;
@@ -49,6 +50,11 @@ public class RoutingInformationProtocol implements UnicastServiceUserInterface, 
             datagramSocket.receive(datagramPacket);
 
             UnicastPDU unicastPDU = new UnicastPDU(new String(datagramPacket.getData()).trim());
+
+            System.out.println("[NEW MESSAGE]: " + unicastPDU.getMessage() + ", from: " + datagramPacket.getAddress()
+                    + ":" + datagramPacket.getPort());
+
+            UnicastReceivedMessagesSingleton.addMessage(unicastPDU);
 
             datagramSocket.close();
         } catch (IOException ioException) {
