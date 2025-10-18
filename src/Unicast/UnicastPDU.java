@@ -23,6 +23,10 @@ public class UnicastPDU {
         return buffer;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
     public void verifyMessage() throws InvalidPDUException {
         if (this.message == null) {
             throw new InvalidPDUFormatException("[INVALID FORMAT]: PDU IS NULL");
