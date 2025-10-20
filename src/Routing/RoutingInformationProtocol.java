@@ -50,13 +50,18 @@ public class RoutingInformationProtocol
 
     public void UDP() {
         byte[] buffer;
+        short ucsapId;
+        UnicastPDU unicastPDU;
         DatagramSocket datagramSocket;
         DatagramPacket datagramPacket;
-        UnicastAddressSingleton unicastAddressSingleton = UnicastAddressSingleton.getInstance();
-        UnicastReceivedMessagesSingleton unicastReceivedMessagesSingleton = UnicastReceivedMessagesSingleton
-                .getInstance();
+        Optional<Short> ucsapIdOptional;
+        UnicastAddressSingleton unicastAddressSingleton;
+        UnicastReceivedMessagesSingleton unicastReceivedMessagesSingleton;
 
         buffer = new byte[1024];
+        unicastAddressSingleton = UnicastAddressSingleton.getInstance();
+        unicastReceivedMessagesSingleton = UnicastReceivedMessagesSingleton
+                .getInstance();
 
         try {
             datagramSocket = new DatagramSocket(this.port);
@@ -64,10 +69,10 @@ public class RoutingInformationProtocol
 
             datagramSocket.receive(datagramPacket);
 
-            UnicastPDU unicastPDU = new UnicastPDU(new String(datagramPacket.getData()).trim());
+            unicastPDU = new UnicastPDU(new String(datagramPacket.getData()).trim());
 
             unicastReceivedMessagesSingleton.addMessage(unicastPDU);
-            Optional<Short> ucsapIdOptional = unicastAddressSingleton
+            ucsapIdOptional = unicastAddressSingleton
                     .getUcsapIdFrom(datagramPacket.getAddress().toString(), datagramPacket.getPort());
 
             if (ucsapIdOptional.isEmpty()) {
@@ -76,7 +81,7 @@ public class RoutingInformationProtocol
                 return;
             }
 
-            short ucsapId = ucsapIdOptional.get();
+            ucsapId = ucsapIdOptional.get();
 
             this.UPDataInd(ucsapId, unicastPDU.getMessage());
 
