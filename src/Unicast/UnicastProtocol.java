@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.util.Optional;
 
 import src.Unicast.Exception.InvalidPDUException;
+import src.Utils.Format;
 
 public class UnicastProtocol implements UnicastServerInterface {
 
@@ -33,7 +34,8 @@ public class UnicastProtocol implements UnicastServerInterface {
         UnicastAddress destinationAddress;
         Optional<UnicastAddress> destinationAddressOptional;
 
-        destinationAddressOptional = UnicastAddressSingleton
+        UnicastAddressSingleton unicastAddressSingleton = UnicastAddressSingleton.getInstance();
+        destinationAddressOptional = unicastAddressSingleton
                 .getUnicastAddressFrom(destination);
 
         if (destinationAddressOptional.isEmpty()) {
@@ -44,10 +46,13 @@ public class UnicastProtocol implements UnicastServerInterface {
         destinationAddress = destinationAddressOptional.get();
 
         try {
-            unicastPDU = new UnicastPDU(message);
+            unicastPDU = new UnicastPDU(Format.message(message));
             datagramSocket = new DatagramSocket();
             inetAddress = InetAddress.getByName(destinationAddress.getHostName());
             portNumber = destinationAddress.getPortNumber();
+
+            System.out.println("[SENDING...]: sending message to " + inetAddress.toString() + ":" + portNumber
+                    + ". Content: " + unicastPDU.getMessage());
 
             datagramPacket = new DatagramPacket(
                     unicastPDU.getMessageBytes(),
