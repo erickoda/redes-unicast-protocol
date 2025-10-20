@@ -2,17 +2,26 @@ package src.Unicast;
 
 import java.util.ArrayList;
 
-public class UnicastReceivedMessagesSingleton {
-    private static ArrayList<UnicastPDU> unicastMessages = new ArrayList<UnicastPDU>();
+public final class UnicastReceivedMessagesSingleton {
+    private static UnicastReceivedMessagesSingleton instance = null;
+    private ArrayList<UnicastPDU> unicastMessages = new ArrayList<UnicastPDU>();
 
     private UnicastReceivedMessagesSingleton() {
     }
 
-    public static void addMessage(UnicastPDU unicastPDU) {
-        UnicastReceivedMessagesSingleton.unicastMessages.add(unicastPDU);
+    public void addMessage(UnicastPDU unicastPDU) {
+        this.unicastMessages.add(unicastPDU);
     }
 
-    public static ArrayList<UnicastPDU> getMessages() {
-        return UnicastReceivedMessagesSingleton.unicastMessages;
+    public synchronized static UnicastReceivedMessagesSingleton getInstance() {
+        if (instance == null) {
+            instance = new UnicastReceivedMessagesSingleton();
+        }
+
+        return instance;
+    }
+
+    public ArrayList<UnicastPDU> getMessages() {
+        return this.unicastMessages;
     }
 }
