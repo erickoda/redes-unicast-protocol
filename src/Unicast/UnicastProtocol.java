@@ -9,12 +9,37 @@ import java.util.Optional;
 import src.Unicast.Exception.InvalidPDUException;
 import src.Utils.Format;
 
+/**
+ * Implementa a lógica principal para o Protocolo de Comunicação Unicast que usa
+ * UDP como base.
+ * <p>
+ * Essa classe é responsável por enviar e receber {@link UnicastPDU}.
+ * Ela executa sua própria thread para continuamente ouvir mensagens e
+ * enviá-las para a {@link UnicastServiceUserInterface}.
+ *
+ * @see UnicastPDU
+ * @see UnicastAddressSingleton
+ */
 public class UnicastProtocol implements UnicastServerInterface, Runnable {
 
-    private int port;
+    /*
+     * O serviço de usuário do Unicast responsável para notificar a chegada de novas
+     * mensagens
+     */
     private UnicastServiceUserInterface userService;
+
+    /* O socket do Protocolo UDP */
     private DatagramSocket datagramSocket;
 
+    /*
+     * Constrói a instância unicast para um dado Node
+     * <p>
+     * Utiliza o {@link UnicastAddressSingleton} e o ucsapId para adquirir a porta
+     * na qual esta instância do Nó usará para se comunicar com os demais nós.
+     * 
+     * @param ucsapId é um identificador único - Unicast Service Access Point -
+     * UCSAP.
+     */
     public UnicastProtocol(short ucsapId) {
         UnicastAddressSingleton unicastAddressSingleton = UnicastAddressSingleton.getInstance();
         Optional<UnicastAddress> unicastAddressOptional = unicastAddressSingleton.getUnicastAddressFrom(ucsapId);
@@ -24,20 +49,21 @@ public class UnicastProtocol implements UnicastServerInterface, Runnable {
             System.exit(1);
         }
 
-        this.port = unicastAddressOptional.get().getPortNumber();
-
         try {
-            this.datagramSocket = new DatagramSocket(this.port);
+            this.datagramSocket = new DatagramSocket(unicastAddressOptional.get().getPortNumber());
         } catch (IOException ioException) {
             System.err.println("[ERROR]: failed to create socket");
             System.exit(1);
         }
     }
 
-    public UnicastServiceUserInterface getUserService() {
-        return userService;
-    }
-
+    /*
+     * Escuta por novas mensagens
+     * <p>
+     * Continuamente chama o método {@link #listForMessage()}.
+     * 
+     * @return void
+     */
     @Override
     public void run() {
         while (true) {
@@ -45,14 +71,36 @@ public class UnicastProtocol implements UnicastServerInterface, Runnable {
         }
     }
 
+    /*
+     * Fecha o socket
+     * 
+     * @return void
+     */
     public void closeSocket() {
         this.datagramSocket.close();
     }
 
+    /*
+     * Define o serviço de usuário
+     * 
+     * @param userService - serviço de usuário
+     * 
+     * @return void
+     */
     public void setUserService(UnicastServiceUserInterface userService) {
         this.userService = userService;
     }
 
+    /*
+     * Utiliza o Protocolo UDP para receber mensagens
+     * <p>
+     * Recebe a mensagem do Protocolo UDP, em seguida utiliza o {@link
+     * UnicastAddressSingleton} para buscar o ucsap_id do Nó que enviou a mensagem e
+     * armazena a nova mensagem usando {@link UnicastReceivedMessagesSingleton}. Por
+     * fim, notifica o usuário usando {@link UnicastServiceUserInterface}
+     * 
+     * @return void
+     */
     public void listenForMessage() {
         byte[] buffer;
         short ucsapId;
@@ -98,6 +146,13 @@ public class UnicastProtocol implements UnicastServerInterface, Runnable {
 
     }
 
+    /*
+     * Utiliza o Protocolo UDP para enviar uma mensagem
+     * <p>
+     * 
+     * @return um valor boolean. {@code true} se a mensagem foi enviada ou {@code
+     * false} caso contrário
+     */
     @Override
     public boolean UPDataReq(short destination, String message) {
         int portNumber;
