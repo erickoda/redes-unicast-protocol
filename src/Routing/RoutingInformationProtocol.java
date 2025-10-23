@@ -1,35 +1,14 @@
 package src.Routing;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.util.Optional;
-
-import src.Unicast.UnicastAddress;
-import src.Unicast.UnicastAddressSingleton;
-import src.Unicast.UnicastPDU;
-import src.Unicast.UnicastReceivedMessagesSingleton;
 import src.Unicast.UnicastServerInterface;
 import src.Unicast.UnicastServiceUserInterface;
-import src.Unicast.Exception.InvalidPDUException;
 
 public class RoutingInformationProtocol
-        implements UnicastServiceUserInterface, RoutingProtocolManagementInterface, Runnable {
-    int port;
+        implements UnicastServiceUserInterface, RoutingProtocolManagementInterface {
     private UnicastServerInterface unicastServer;
     private RoutingProtocolManagementServiceUserInterface routingProtocolManagementServiceUserInterface;
 
-    public RoutingInformationProtocol(short ucsapId) {
-        UnicastAddressSingleton unicastAddressSingleton = UnicastAddressSingleton.getInstance();
-
-        Optional<UnicastAddress> unicastAddressOptional = unicastAddressSingleton.getUnicastAddressFrom(ucsapId);
-
-        if (unicastAddressOptional.isEmpty()) {
-            System.err.println("[ERROR]: INVALID NODE UCSAP_ID");
-            System.exit(1);
-        }
-
-        this.port = unicastAddressOptional.get().getPortNumber();
+    public RoutingInformationProtocol() {
     }
 
     public UnicastServerInterface getUnicastServer() {
@@ -38,60 +17,6 @@ public class RoutingInformationProtocol
 
     public void setUnicastServer(UnicastServerInterface unicastServer) {
         this.unicastServer = unicastServer;
-    }
-
-    @Override
-    public void run() {
-        while (true) {
-            System.out.println("[LISTENER]: MESSAGE LISTENER READY!");
-            this.UDP();
-        }
-    }
-
-    public void UDP() {
-        byte[] buffer;
-        short ucsapId;
-        UnicastPDU unicastPDU;
-        DatagramSocket datagramSocket;
-        DatagramPacket datagramPacket;
-        Optional<Short> ucsapIdOptional;
-        UnicastAddressSingleton unicastAddressSingleton;
-        UnicastReceivedMessagesSingleton unicastReceivedMessagesSingleton;
-
-        buffer = new byte[1024];
-        unicastAddressSingleton = UnicastAddressSingleton.getInstance();
-        unicastReceivedMessagesSingleton = UnicastReceivedMessagesSingleton
-                .getInstance();
-
-        try {
-            datagramSocket = new DatagramSocket(this.port);
-            datagramPacket = new DatagramPacket(buffer, buffer.length);
-
-            datagramSocket.receive(datagramPacket);
-
-            unicastPDU = new UnicastPDU(new String(datagramPacket.getData()).trim());
-
-            unicastReceivedMessagesSingleton.addMessage(unicastPDU);
-            ucsapIdOptional = unicastAddressSingleton
-                    .getUcsapIdFrom(datagramPacket.getAddress().toString(), datagramPacket.getPort());
-
-            if (ucsapIdOptional.isEmpty()) {
-                System.err.println("[INVALID ADDRESS]: RECEIVED MESSAGE FROM FOREIGN NODE");
-                datagramSocket.close();
-                return;
-            }
-
-            ucsapId = ucsapIdOptional.get();
-
-            this.UPDataInd(ucsapId, unicastPDU.getMessage());
-
-            datagramSocket.close();
-        } catch (IOException ioException) {
-            System.err.println(ioException);
-        } catch (InvalidPDUException invalidPDUException) {
-            System.err.println(invalidPDUException);
-        }
-
     }
 
     @Override

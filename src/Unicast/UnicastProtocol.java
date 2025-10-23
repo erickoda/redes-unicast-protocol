@@ -9,19 +9,93 @@ import java.util.Optional;
 import src.Unicast.Exception.InvalidPDUException;
 import src.Utils.Format;
 
-public class UnicastProtocol implements UnicastServerInterface {
+public class UnicastProtocol implements UnicastServerInterface, Runnable {
 
+    private int port;
     private UnicastServiceUserInterface userService;
+    private DatagramSocket datagramSocket;
 
-    public UnicastProtocol() {
+    public UnicastProtocol(short ucsapId) {
+        UnicastAddressSingleton unicastAddressSingleton = UnicastAddressSingleton.getInstance();
+        Optional<UnicastAddress> unicastAddressOptional = unicastAddressSingleton.getUnicastAddressFrom(ucsapId);
+
+        if (unicastAddressOptional.isEmpty()) {
+            System.err.println("[ERROR]: INVALID NODE UCSAP_ID");
+            System.exit(1);
+        }
+
+        this.port = unicastAddressOptional.get().getPortNumber();
+
+        try {
+            this.datagramSocket = new DatagramSocket(this.port);
+        } catch (IOException ioException) {
+            System.err.println("[ERROR]: failed to create socket");
+            System.exit(1);
+        }
     }
 
     public UnicastServiceUserInterface getUserService() {
         return userService;
     }
 
+    @Override
+    public void run() {
+        while (true) {
+            this.listenForMessage();
+        }
+    }
+
+    public void closeSocket() {
+        this.datagramSocket.close();
+    }
+
     public void setUserService(UnicastServiceUserInterface userService) {
         this.userService = userService;
+    }
+
+    public void listenForMessage() {
+        byte[] buffer;
+        short ucsapId;
+        UnicastPDU unicastPDU;
+        DatagramPacket datagramPacket;
+        Optional<Short> ucsapIdOptional;
+        UnicastAddressSingleton unicastAddressSingleton;
+        UnicastReceivedMessagesSingleton unicastReceivedMessagesSingleton;
+
+        buffer = new byte[1024];
+        unicastAddressSingleton = UnicastAddressSingleton.getInstance();
+        unicastReceivedMessagesSingleton = UnicastReceivedMessagesSingleton
+                .getInstance();
+
+        try {
+            datagramPacket = new DatagramPacket(buffer, buffer.length);
+
+            this.datagramSocket.receive(datagramPacket);
+
+            unicastPDU = new UnicastPDU(new String(datagramPacket.getData()).trim());
+
+            unicastReceivedMessagesSingleton.addMessage(unicastPDU);
+            ucsapIdOptional = unicastAddressSingleton
+                    .getUcsapIdFrom(datagramPacket.getAddress(),
+                            datagramPacket.getPort());
+
+            if (ucsapIdOptional.isEmpty()) {
+                System.err.println("[INVALID ADDRESS]: RECEIVED MESSAGE FROM FOREIGN NODE. IP = "
+                        + datagramPacket.getAddress().toString() + " Port = " +
+                        datagramPacket.getPort());
+                return;
+            }
+
+            ucsapId = ucsapIdOptional.get();
+
+            this.userService.UPDataInd(ucsapId, unicastPDU.getMessage());
+
+        } catch (IOException ioException) {
+            System.err.println(ioException);
+        } catch (InvalidPDUException invalidPDUException) {
+            System.err.println(invalidPDUException);
+        }
+
     }
 
     @Override
@@ -29,7 +103,6 @@ public class UnicastProtocol implements UnicastServerInterface {
         int portNumber;
         UnicastPDU unicastPDU;
         InetAddress inetAddress;
-        DatagramSocket datagramSocket;
         DatagramPacket datagramPacket;
         UnicastAddress destinationAddress;
         Optional<UnicastAddress> destinationAddressOptional;
@@ -47,8 +120,7 @@ public class UnicastProtocol implements UnicastServerInterface {
 
         try {
             unicastPDU = new UnicastPDU(Format.message(message));
-            datagramSocket = new DatagramSocket();
-            inetAddress = InetAddress.getByName(destinationAddress.getHostName());
+            inetAddress = destinationAddress.getInetAddress();
             portNumber = destinationAddress.getPortNumber();
 
             System.out.println("[SENDING...]: sending message to " + inetAddress.toString() + ":" + portNumber
@@ -62,7 +134,6 @@ public class UnicastProtocol implements UnicastServerInterface {
 
             datagramSocket.send(datagramPacket);
 
-            datagramSocket.close();
         } catch (IOException ioe) {
             System.err.println(ioe);
             return false;

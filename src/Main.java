@@ -40,13 +40,14 @@ class Main {
         // Inicialização dos objetos de protocolo e roteamento e variáveis
         command = "";
         sc = new Scanner(System.in);
-        unicastProtocol = new UnicastProtocol();
-        routingInformationProtocol = new RoutingInformationProtocol(nodeUcsapId);
+        unicastProtocol = new UnicastProtocol(nodeUcsapId);
+        routingInformationProtocol = new RoutingInformationProtocol();
 
         unicastProtocol.setUserService(routingInformationProtocol);
         routingInformationProtocol.setUnicastServer(unicastProtocol);
 
-        new Thread(routingInformationProtocol).start();
+        // Thread para receber mensagens
+        new Thread(unicastProtocol).start();
 
         while (!command.equals("exit")) {
 
@@ -72,6 +73,7 @@ class Main {
             }
         }
 
+        unicastProtocol.closeSocket();
         sc.close();
     }
 
@@ -132,7 +134,7 @@ class Main {
         }
 
         unicastAddress = unicastAddressOptional.get();
-        System.out.println(unicastAddress.getUcsapId() + " " + unicastAddress.getHostName() + ":"
+        System.out.println(unicastAddress.getUcsapId() + " " + unicastAddress.getInetAddress().toString() + ":"
                 + unicastAddress.getPortNumber());
     }
 }

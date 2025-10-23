@@ -4,6 +4,8 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -27,6 +29,9 @@ public final class UnicastAddressSingleton {
             } catch (FileNotFoundException fileNotFoundException) {
                 System.err.println("[ERROR]: ENTITY CONFIGURATION FILE WAS NOT FOUND!");
                 System.exit(1);
+            } catch (UnknownHostException unknownHostException) {
+                System.err.println("[ERROR]: UNKNOWN ADDRESS!");
+                System.exit(1);
             }
 
             instance = new UnicastAddressSingleton(conf.toArray(new UnicastAddress[0]));
@@ -45,13 +50,15 @@ public final class UnicastAddressSingleton {
                 .findFirst();
     }
 
-    public synchronized Optional<Short> getUcsapIdFrom(String ip, int port) {
+    public synchronized Optional<Short> getUcsapIdFrom(InetAddress ip, int port) {
         if (unicastAddresses == null) {
             return Optional.empty();
         }
 
         Optional<UnicastAddress> unicastAddressOptional = Arrays.stream(unicastAddresses)
-                .filter(address -> address.getHostName().equals(ip) && address.getPortNumber() == port)
+                .filter(address -> address.getInetAddress().equals(ip)
+                        &&
+                        address.getPortNumber() == port)
                 .findFirst();
 
         if (unicastAddressOptional.isEmpty()) {
