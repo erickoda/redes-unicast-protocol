@@ -113,7 +113,12 @@ class Main {
 
             System.out.println("[SENDING...]: " + message + " to destination " + destination);
 
-            unicastProtocol.UPDataReq(destination, message);
+            boolean hasSend = unicastProtocol.UPDataReq(destination, message);
+            if (!hasSend) {
+                System.out.println("[FAIL]: FAILED TO SEND THE MESSAGE");
+            } else {
+                System.out.println("[SUCCESS]: SENT THE MESSAGE");
+            }
         } catch (NumberFormatException numberFormatException) {
             System.out.println(
                     "[ERROR]: The ucsap_id '" + commandWords[1] + "' is not a valid short number.");
