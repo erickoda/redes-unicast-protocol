@@ -11,11 +11,24 @@ import src.Unicast.UnicastPDU;
  * @see UnicastPDU
  */
 public class Format {
+
+    /**
+     * Construtor privado para impedir a instanciação desta classe de utilidade.
+     * <p>
+     * Esta classe contém apenas métodos estáticos e não deve ser instanciada.
+     * </p>
+     */
+    private Format() {
+        // Impede a instanciação
+        throw new IllegalStateException("Classe de utilidade (Utility class)");
+    }
+
     /**
      * Formata uma mensagem de usuário para o formato de mensagem da PDU do Unicast
      * <p>
      * Formata uma mensagem para o padrão:
-     * <UPDREQPDU><espaço><tamanho_dados><espaço><dados>
+     * {@code UPDREQPDU <tamanho_dados> <dados>}
+     * </p>
      * 
      * @param message - mensagem do usuário
      * 

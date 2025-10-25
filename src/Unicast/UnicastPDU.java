@@ -34,6 +34,9 @@ public class UnicastPDU {
      * </p>
      * 
      * @param message - conteúdo da mensagem
+     * 
+     * @throws InvalidPDUException lança uma exceção se o formato da PDU for
+     *                             inválido.
      */
     public UnicastPDU(String message) throws InvalidPDUException {
         this.message = message;
@@ -66,7 +69,8 @@ public class UnicastPDU {
      * Verifica se a mensagem é nula, tem tamanho inválido ou se houve algum erro na
      * formatação, joga uma {@link InvalidPDUException} diferente para cada erro.
      * 
-     * @return mensagem formatada
+     * @throws InvalidPDUException - Lança um exceção se o formato da PDU for
+     *                             inválido
      */
     public void verifyMessage() throws InvalidPDUException {
         if (this.message == null) {

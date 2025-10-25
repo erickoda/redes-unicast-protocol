@@ -28,7 +28,9 @@ public class UnicastAddress {
      * uma {@link UnknownHostException} caso o endereço IP base seja inválido.
      * </p>
      * 
-     * @param line - uma String com os dados do endereço
+     * @param line - uma String com os dados do endereço.
+     * 
+     * @throws UnknownHostException - lança uma exceção caso o Ip seja desconhecido.
      */
     public UnicastAddress(String line) throws UnknownHostException {
         String[] words = line.split(" ");

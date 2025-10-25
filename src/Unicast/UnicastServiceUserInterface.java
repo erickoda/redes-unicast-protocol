@@ -16,8 +16,6 @@ public interface UnicastServiceUserInterface {
      * @param source  - O ucsap_id do nó que enviou a mensagem
      * 
      * @param message - A mensagem recebida
-     * 
-     * @return void
      */
     public void UPDataInd(short source, String message);
 }

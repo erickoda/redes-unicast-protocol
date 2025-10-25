@@ -24,6 +24,11 @@ public class RoutingInformationProtocol
         return unicastServer;
     }
 
+    /**
+     * Define o serviço de transferência Unicast
+     * 
+     * @param unicastServer - O serviço de transferência Unicast
+     */
     public void setUnicastServer(UnicastServerInterface unicastServer) {
         this.unicastServer = unicastServer;
     }

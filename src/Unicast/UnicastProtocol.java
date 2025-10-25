@@ -61,7 +61,7 @@ public class UnicastProtocol implements UnicastServerInterface, Runnable {
     /**
      * Escuta por novas mensagens
      * <p>
-     * Continuamente chama o método {@link #listForMessage()}.
+     * Continuamente chama o método {@link #listenForMessage()}.
      * </p>
      * 
      */
