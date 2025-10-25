@@ -8,11 +8,12 @@ import src.Unicast.UnicastServiceUserInterface;
  * Roteamento.
  * <p>
  * Essa classe é responsável pela troca de informações de roteamento.
+ * </p>
  * 
  */
 public class RoutingInformationProtocol
         implements UnicastServiceUserInterface, RoutingProtocolManagementInterface {
-    /* O serviço de transferência Unicast */
+    /** O serviço de transferência Unicast */
     private UnicastServerInterface unicastServer;
     private RoutingProtocolManagementServiceUserInterface routingProtocolManagementServiceUserInterface;
 
@@ -27,10 +28,10 @@ public class RoutingInformationProtocol
         this.unicastServer = unicastServer;
     }
 
-    /*
+    /**
      * Notifica o usuário do recebimento de uma nova mensagem.
      * 
-     * @param source - o UCSAP ID da entidade que enviou a mensagem
+     * @param source  - o UCSAP ID da entidade que enviou a mensagem
      * 
      * @param message - a mensagem recebida
      */

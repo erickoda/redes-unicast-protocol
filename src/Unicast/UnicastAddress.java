@@ -12,20 +12,21 @@ import java.net.UnknownHostException;
  * @see UnicastProtocol
  */
 public class UnicastAddress {
-    /* Unicast Service Access Point - UCSAP */
+    /** Unicast Service Access Point - UCSAP */
     private short ucsapId;
 
-    /* O endereço IP base */
+    /** O endereço IP base */
     private InetAddress inetAddress;
 
-    /* Porta utilizada pelo socket */
+    /** Porta utilizada pelo socket */
     private int portNumber;
 
-    /*
+    /**
      * Constrói a instância do Endereço
      * <p>
      * Extrai os endereços de um String, formata para os tipos apropriados e joga
      * uma {@link UnknownHostException} caso o endereço IP base seja inválido.
+     * </p>
      * 
      * @param line - uma String com os dados do endereço
      */
@@ -37,7 +38,7 @@ public class UnicastAddress {
         this.portNumber = Integer.parseInt(words[2]);
     }
 
-    /*
+    /**
      * Retorna o UCSAP
      * 
      * @return o identificador únicas UCSAP
@@ -46,7 +47,7 @@ public class UnicastAddress {
         return ucsapId;
     }
 
-    /*
+    /**
      * Retorna o endereço IP base
      * 
      * @return endereço IP
@@ -55,7 +56,7 @@ public class UnicastAddress {
         return inetAddress;
     }
 
-    /*
+    /**
      * Retorna a porta do endereço
      * 
      * @return porta utilizada no endereço

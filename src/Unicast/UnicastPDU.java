@@ -11,25 +11,27 @@ import src.Unicast.Exception.InvalidPDUSizeException;
  * <p>
  * Essa classe é responsável por garantir e padronizar o formato da
  * PDU do {@link UnicastProtocol}.
+ * </p>
  *
  * @see UnicastProtocol
  */
 public class UnicastPDU {
 
-    /* O tamanho máximo da mensagem */
+    /** O tamanho máximo da mensagem */
     private final int sizeInBytes = 1024;
 
-    /* O conteúdo da mensagem */
+    /** O conteúdo da mensagem */
     private String message;
 
-    /* Mensagem em bytes */
+    /** Mensagem em bytes */
     private byte[] buffer;
 
-    /*
+    /**
      * Constrói a instância PDU para uma mensagem
      * <p>
      * Tenta formatar a mensagem para o padrão UDP, caso haja algum erro, uma
      * {@link InvalidPDUException} é ativada
+     * </p>
      * 
      * @param message - conteúdo da mensagem
      */
@@ -40,7 +42,7 @@ public class UnicastPDU {
         verifyMessage();
     }
 
-    /*
+    /**
      * Pega a mensagem em bytes
      * 
      * @return mensagem formatada em m array de bytes
@@ -49,7 +51,7 @@ public class UnicastPDU {
         return buffer;
     }
 
-    /*
+    /**
      * Pega a mensagem formatada
      * 
      * @return mensagem formatada
@@ -58,7 +60,7 @@ public class UnicastPDU {
         return message;
     }
 
-    /*
+    /**
      * Verifica se a mensagem é válida
      * <p>
      * Verifica se a mensagem é nula, tem tamanho inválido ou se houve algum erro na

@@ -11,7 +11,7 @@ import src.Unicast.UnicastPDU;
  * @see UnicastPDU
  */
 public class Format {
-    /*
+    /**
      * Formata uma mensagem de usuário para o formato de mensagem da PDU do Unicast
      * <p>
      * Formata uma mensagem para o padrão:

@@ -22,23 +22,24 @@ import src.Utils.Format;
  */
 public class UnicastProtocol implements UnicastServerInterface, Runnable {
 
-    /*
+    /**
      * O serviço de usuário do Unicast responsável para notificar a chegada de novas
      * mensagens
      */
     private UnicastServiceUserInterface userService;
 
-    /* O socket do Protocolo UDP */
+    /** O socket do Protocolo UDP */
     private DatagramSocket datagramSocket;
 
-    /*
+    /**
      * Constrói a instância unicast para um dado Node
      * <p>
      * Utiliza o {@link UnicastAddressSingleton} e o ucsapId para adquirir a porta
      * na qual esta instância do Nó usará para se comunicar com os demais nós.
+     * </p>
      * 
      * @param ucsapId é um identificador único - Unicast Service Access Point -
-     * UCSAP.
+     *                UCSAP.
      */
     public UnicastProtocol(short ucsapId) {
         UnicastAddressSingleton unicastAddressSingleton = UnicastAddressSingleton.getInstance();
@@ -57,12 +58,12 @@ public class UnicastProtocol implements UnicastServerInterface, Runnable {
         }
     }
 
-    /*
+    /**
      * Escuta por novas mensagens
      * <p>
      * Continuamente chama o método {@link #listForMessage()}.
+     * </p>
      * 
-     * @return void
      */
     @Override
     public void run() {
@@ -71,35 +72,31 @@ public class UnicastProtocol implements UnicastServerInterface, Runnable {
         }
     }
 
-    /*
+    /**
      * Fecha o socket
-     * 
-     * @return void
      */
     public void closeSocket() {
         this.datagramSocket.close();
     }
 
-    /*
+    /**
      * Define o serviço de usuário
      * 
      * @param userService - serviço de usuário
-     * 
-     * @return void
      */
     public void setUserService(UnicastServiceUserInterface userService) {
         this.userService = userService;
     }
 
-    /*
+    /**
      * Utiliza o Protocolo UDP para receber mensagens
      * <p>
      * Recebe a mensagem do Protocolo UDP, em seguida utiliza o {@link
      * UnicastAddressSingleton} para buscar o ucsap_id do Nó que enviou a mensagem e
      * armazena a nova mensagem usando {@link UnicastReceivedMessagesSingleton}. Por
      * fim, notifica o usuário usando {@link UnicastServiceUserInterface}
+     * </p>
      * 
-     * @return void
      */
     public void listenForMessage() {
         byte[] buffer;
@@ -146,13 +143,12 @@ public class UnicastProtocol implements UnicastServerInterface, Runnable {
 
     }
 
-    /*
+    /**
      * Utiliza o Protocolo UDP para enviar uma mensagem
-     * <p>
      * 
      * @param destination - O ucsap_id do nó destino da mensagem
      * 
-     * @param message - A mensagem a ser enviada para o nó destino
+     * @param message     - A mensagem a ser enviada para o nó destino
      * 
      * @return um valor boolean. {@code true} se a mensagem foi enviada ou {@code
      * false} caso contrário
