@@ -9,14 +9,38 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Implementa um Singleton que armazena os dados dos nós da rede.
+ * <p>
+ * Essa classe é responsável por validar e armazenar os {@link UnicastAddress}
+ * das Entidades do {@link UnicastProtocol}.
+ *
+ * @see UnicastProtocol
+ * @see UnicastAddress
+ */
 public final class UnicastAddressSingleton {
+    /* Referência para a única instância do Singleton. */
     private static UnicastAddressSingleton instance = null;
+
+    /* Lista de endereços das entidades. */
     private UnicastAddress[] unicastAddresses = null;
 
+    /*
+     * Constrói a instância do singleton.
+     * 
+     * @param unicastAddresses - lista de endereço de entidades.
+     */
     private UnicastAddressSingleton(UnicastAddress[] unicastAddresses) {
         this.unicastAddresses = unicastAddresses;
     }
 
+    /*
+     * Pega a instância do singleton.
+     * <p>
+     * Retorna a instância do singleton. Cria a instância se não existir.
+     * 
+     * @return retorna a instância do singleton
+     */
     public static synchronized UnicastAddressSingleton getInstance() {
         if (instance == null) {
             ArrayList<UnicastAddress> conf = new ArrayList<UnicastAddress>();
@@ -40,6 +64,16 @@ public final class UnicastAddressSingleton {
         return instance;
     }
 
+    /*
+     * Busca o Endereço de uma entidade.
+     * <p>
+     * Busca o endereço de uma Entidade do Protocolo Unicast através de seu id;
+     * 
+     * @param id - ucsap_id da entidade.
+     * 
+     * @return retorna um Optional com o objeto do endereço caso seja encontrado ou
+     * None se o endereço não existir.
+     */
     public synchronized Optional<UnicastAddress> getUnicastAddressFrom(short id) {
         if (unicastAddresses == null) {
             return Optional.empty();
@@ -50,6 +84,18 @@ public final class UnicastAddressSingleton {
                 .findFirst();
     }
 
+    /*
+     * Busca o UCSAP ID.
+     * <p>
+     * Retorna o UCSAP ID de uma entidade dado o endereço ip e a porta.
+     * 
+     * @param ip - o endereço o IP.
+     * 
+     * @param port - a porta do endereço
+     * 
+     * @return retorna um Optional com o valor do UCSAP ID caso seja encontrado ou
+     * None se o endereço não existir.
+     */
     public synchronized Optional<Short> getUcsapIdFrom(InetAddress ip, int port) {
         if (unicastAddresses == null) {
             return Optional.empty();
