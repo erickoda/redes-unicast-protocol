@@ -1,3 +1,5 @@
 *.class
 /.vscode
 /docs
+/bin
+/RedesProjeto.jar
