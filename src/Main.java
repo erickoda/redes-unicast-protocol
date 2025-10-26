@@ -44,7 +44,7 @@ class Main {
         routingInformationProtocol = new RoutingInformationProtocol();
 
         unicastProtocol.setUserService(routingInformationProtocol);
-        routingInformationProtocol.setUnicastServer(unicastProtocol);
+        routingInformationProtocol.setUnicastService(unicastProtocol);
 
         // Thread para receber mensagens
         new Thread(unicastProtocol).start();

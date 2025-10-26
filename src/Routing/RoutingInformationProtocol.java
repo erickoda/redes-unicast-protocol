@@ -1,6 +1,6 @@
 package src.Routing;
 
-import src.Unicast.UnicastServerInterface;
+import src.Unicast.UnicastServiceInterface;
 import src.Unicast.UnicastServiceUserInterface;
 
 /**
@@ -14,23 +14,23 @@ import src.Unicast.UnicastServiceUserInterface;
 public class RoutingInformationProtocol
         implements UnicastServiceUserInterface, RoutingProtocolManagementInterface {
     /** O serviço de transferência Unicast */
-    private UnicastServerInterface unicastServer;
+    private UnicastServiceInterface unicastService;
     private RoutingProtocolManagementServiceUserInterface routingProtocolManagementServiceUserInterface;
 
     public RoutingInformationProtocol() {
     }
 
-    public UnicastServerInterface getUnicastServer() {
-        return unicastServer;
+    public UnicastServiceInterface getUnicastService() {
+        return unicastService;
     }
 
     /**
      * Define o serviço de transferência Unicast
      * 
-     * @param unicastServer - O serviço de transferência Unicast
+     * @param unicastService - O serviço de transferência Unicast
      */
-    public void setUnicastServer(UnicastServerInterface unicastServer) {
-        this.unicastServer = unicastServer;
+    public void setUnicastService(UnicastServiceInterface unicastService) {
+        this.unicastService = unicastService;
     }
 
     /**

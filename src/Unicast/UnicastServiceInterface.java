@@ -1,13 +1,13 @@
 package src.Unicast;
 
 /**
- * Define o serviço de Unicast server para implementação do protocolo Unicast.
+ * Define o serviço de Unicast para implementação do protocolo Unicast.
  * <p>
  * Essa interface especifica o contrato para um usuário que deseja enviar dados
  * para outro nó na rede Unicast
  * </p>
  */
-public interface UnicastServerInterface {
+public interface UnicastServiceInterface {
     /**
      * Utiliza o Protocolo UDP para enviar uma mensagem
      * 

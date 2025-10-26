@@ -7,7 +7,6 @@ import java.net.InetAddress;
 import java.util.Optional;
 
 import src.Unicast.Exception.InvalidPDUException;
-import src.Utils.Format;
 
 /**
  * Implementa a lógica principal para o Protocolo de Comunicação Unicast que usa
@@ -20,7 +19,7 @@ import src.Utils.Format;
  * @see UnicastPDU
  * @see UnicastAddressSingleton
  */
-public class UnicastProtocol implements UnicastServerInterface, Runnable {
+public class UnicastProtocol implements UnicastServiceInterface, Runnable {
 
     /**
      * O serviço de usuário do Unicast responsável para notificar a chegada de novas
@@ -174,7 +173,7 @@ public class UnicastProtocol implements UnicastServerInterface, Runnable {
         destinationAddress = destinationAddressOptional.get();
 
         try {
-            unicastPDU = new UnicastPDU(Format.message(message));
+            unicastPDU = new UnicastPDU(this.formatMessaage(message));
             inetAddress = destinationAddress.getInetAddress();
             portNumber = destinationAddress.getPortNumber();
 
@@ -198,5 +197,20 @@ public class UnicastProtocol implements UnicastServerInterface, Runnable {
         }
 
         return true;
+    }
+
+    /**
+     * Formata uma mensagem de usuário para o formato de mensagem da PDU do Unicast
+     * <p>
+     * Formata uma mensagem para o padrão:
+     * {@code UPDREQPDU <tamanho_dados> <dados>}
+     * </p>
+     * 
+     * @param message - mensagem do usuário
+     * 
+     * @return mensagem no padrão da PDU do Unicast
+     */
+    private String formatMessaage(String message) {
+        return "UPDREQPDU " + message.length() + " " + message;
     }
 }
