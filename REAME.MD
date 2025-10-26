@@ -28,13 +28,17 @@ exit
 ```
 
 ## Generate .jar
-- mkdir -p bin
+```bash
+mkdir -p bin
 
-- javac -d bin -sourcepath src src/Main.java src/Routing/*.java src/Unicast/*.java src/Unicast/Exception/*.java
+javac -d bin -sourcepath src src/Main.java src/Routing/*.java src/Unicast/*.java src/Unicast/Exception/*.java
 
-- jar cvfm RedesProjeto.jar manifest.txt -C bin .
+jar cvfm RedesProjeto.jar manifest.txt -C bin .
 
-- java -jar RedesProjeto.jar 1
+java -jar RedesProjeto.jar 1
+```
 
 ## Generate javadocs
-- javadoc -d docs -sourcepath . -subpackages src
+```bash
+javadoc -d docs -sourcepath . -subpackages src
+```
