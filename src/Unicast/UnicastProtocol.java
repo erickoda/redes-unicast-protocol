@@ -30,6 +30,8 @@ public class UnicastProtocol implements UnicastServiceInterface, Runnable {
     /** O socket do Protocolo UDP */
     private DatagramSocket datagramSocket;
 
+    private volatile boolean running = true;
+
     /**
      * Constrói a instância unicast para um dado Node
      * <p>
@@ -66,7 +68,7 @@ public class UnicastProtocol implements UnicastServiceInterface, Runnable {
      */
     @Override
     public void run() {
-        while (true) {
+        while (running) {
             this.listenForMessage();
         }
     }
@@ -75,6 +77,7 @@ public class UnicastProtocol implements UnicastServiceInterface, Runnable {
      * Fecha o socket
      */
     public void closeSocket() {
+        this.running = false;
         this.datagramSocket.close();
     }
 
@@ -135,7 +138,13 @@ public class UnicastProtocol implements UnicastServiceInterface, Runnable {
             this.userService.UPDataInd(ucsapId, unicastPDU.getMessage());
 
         } catch (IOException ioException) {
-            System.err.println(ioException);
+            if (running) {
+                // Erro Inesperado
+                System.err.println(ioException);
+            } else {
+                // Erro esperado devido ao fechamento do programa
+                return;
+            }
         } catch (InvalidPDUException invalidPDUException) {
             System.err.println(invalidPDUException);
         }
