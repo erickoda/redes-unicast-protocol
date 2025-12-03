@@ -1,5 +1,11 @@
 package src.Routing.PDU;
 
+/**
+ * PDU de Indicação do Protocolo de Informação de Roteamento (RIP).
+ * Envia o vetor de distância de um nó.
+ * 
+ * @see src.Routing.RoutingInformationProtocol
+ */
 public class RoutingInformationProtocolIndicationPDU {
     /** Nó */
     private int ripNode;
@@ -13,9 +19,9 @@ public class RoutingInformationProtocolIndicationPDU {
     /**
      * Construtor para criar a PDU a partir do nó e do vetor de distância
      * 
-     * @param ripNode
-     * @param distanceVector
-     * @throws InvalidRIPPDUException
+     * @param ripNode        Nó
+     * @param distanceVector Vetor de distância
+     * @throws InvalidRIPPDUException Exceção de PDU Inválida
      */
     public RoutingInformationProtocolIndicationPDU(short ripNode, int[] distanceVector) throws InvalidRIPPDUException {
         this.ripNode = ripNode;
@@ -63,6 +69,13 @@ public class RoutingInformationProtocolIndicationPDU {
         return bytes.length <= 512;
     }
 
+    /**
+     * Construtor para criar a PDU a partir da mensagem
+     * 
+     * @param message Mensagem da PDU
+     * 
+     * @throws InvalidRIPPDUException Exceção de PDU Inválida
+     */
     public RoutingInformationProtocolIndicationPDU(String message) throws InvalidRIPPDUException {
         this.message = message;
 
@@ -90,14 +103,29 @@ public class RoutingInformationProtocolIndicationPDU {
         }
     }
 
+    /**
+     * Pega a mensagem da PDU
+     * 
+     * @return mensagem
+     */
     public String getMessage() {
         return message;
     }
 
+    /**
+     * Pega o vetor de distância
+     * 
+     * @return vetor de distância
+     */
     public int[] getDistanceVector() {
         return distanceVector;
     }
 
+    /**
+     * Pega o nó
+     * 
+     * @return nó
+     */
     public int getRipNode() {
         return ripNode;
     }

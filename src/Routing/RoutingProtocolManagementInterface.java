@@ -7,7 +7,7 @@ public interface RoutingProtocolManagementInterface {
     /**
      * Solicita a Tabela de Distância de um nó específico.
      * 
-     * @param node
+     * @param node Nó
      * 
      * @return true se a requisição foi enviada com sucesso, false caso contrário.
      */
@@ -16,8 +16,8 @@ public interface RoutingProtocolManagementInterface {
     /**
      * Solicita o custo do enlace entre dois nós.
      * 
-     * @param nodeA
-     * @param nodeB
+     * @param nodeA Nó A
+     * @param nodeB Nó B
      * 
      * @return true se a requisição foi enviada com sucesso, false caso contrário.
      */
@@ -26,9 +26,9 @@ public interface RoutingProtocolManagementInterface {
     /**
      * Altera o custo do enlace entre dois nós.
      * 
-     * @param nodeA
-     * @param nodeB
-     * @param cost
+     * @param nodeA Nó A
+     * @param nodeB Nó B
+     * @param cost  Custo do enlace entre A e B
      * 
      * @return true se a requisição foi enviada com sucesso, false caso contrário.
      */

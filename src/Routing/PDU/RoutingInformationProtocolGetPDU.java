@@ -2,6 +2,8 @@ package src.Routing.PDU;
 
 /**
  * PDU para requisição de custo de link entre dois nós
+ * 
+ * @see src.Routing.RoutingInformationProtocol (RIP)
  */
 public class RoutingInformationProtocolGetPDU {
 
@@ -19,6 +21,8 @@ public class RoutingInformationProtocolGetPDU {
      * 
      * @param ripNodeA Nó A
      * @param ripNodeB Nó B
+     * 
+     * @throws InvalidRIPPDUException Exceção de PDU Inválida
      */
     public RoutingInformationProtocolGetPDU(short ripNodeA, short ripNodeB) throws InvalidRIPPDUException {
         this.ripNodeA = ripNodeA;

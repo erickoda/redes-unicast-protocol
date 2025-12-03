@@ -9,8 +9,16 @@ import src.Routing.RoutingProtocolManagementInterface;
 import src.Unicast.UnicastAddress;
 import src.Unicast.UnicastAddressSingleton;
 
+/**
+ * Classe Principal para a simulação do sistema de roteamento.
+ */
 public class Main {
 
+    /**
+     * Main do sistema de roteamento.
+     * 
+     * @param args argumento por linha de comando (não utilizado).
+     */
     public static void main(String[] args) {
         try {
             System.out.println("=== Inicializando Sistema de Roteamento ===");

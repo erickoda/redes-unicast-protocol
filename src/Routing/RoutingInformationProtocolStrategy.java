@@ -17,8 +17,8 @@ public interface RoutingInformationProtocolStrategy {
     /**
      * Solicita o custo do link entre dois nós.
      * 
-     * @param nodeA
-     * @param nodeB
+     * @param nodeA Nó A
+     * @param nodeB Nó B
      * @return true se a requisição foi enviada com sucesso, false caso contrário.
      */
     default boolean executeGetLinkCost(short nodeA, short nodeB) {
@@ -28,8 +28,8 @@ public interface RoutingInformationProtocolStrategy {
     /**
      * Altera o custo do link entre dois nós.
      * 
-     * @param nodeA
-     * @param nodeB
+     * @param nodeA Nó A
+     * @param nodeB Nó B
      * @param cost  custo do enlace
      * @return true se a requisição foi enviada com sucesso, false caso contrário.
      */
@@ -40,7 +40,8 @@ public interface RoutingInformationProtocolStrategy {
     /**
      * Solicita a Tabela de Distância de um nó específico.
      * 
-     * @param node
+     * @param node Nó
+     * 
      * @return true se a requisição foi enviada com sucesso, false caso contrário.
      */
     default boolean executeGetDistanceTable(short node) {

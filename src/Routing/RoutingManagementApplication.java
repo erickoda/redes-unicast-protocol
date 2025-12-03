@@ -13,7 +13,7 @@ public class RoutingManagementApplication implements RoutingProtocolManagementSe
     /**
      * Construtor principal.
      * 
-     * @param routingManagement
+     * @param routingManagement A interface de gerenciamento de roteamento.
      */
     public RoutingManagementApplication(
             RoutingProtocolManagementInterface routingManagement) {

@@ -234,7 +234,7 @@ public class Manager implements RoutingInformationProtocolStrategy {
     /**
      * Solicita a tabela de distância de um nó.
      * 
-     * @param nodeA O ID do nó.
+     * @param node O ID do nó.
      * 
      * @return true se a requisição foi enviada com sucesso, false caso contrário.
      */

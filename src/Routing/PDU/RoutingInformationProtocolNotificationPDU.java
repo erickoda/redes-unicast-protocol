@@ -1,5 +1,11 @@
 package src.Routing.PDU;
 
+/**
+ * PDU de Notificação do Protocolo de Informação de Roteamento (RIP).
+ * Notifica a confirmação de mudança de custo do enlace entre dois nós.
+ * 
+ * @see src.Routing.RoutingInformationProtocol
+ */
 public class RoutingInformationProtocolNotificationPDU {
     /** Mensage da PDU */
     private String message = "";
@@ -7,10 +13,10 @@ public class RoutingInformationProtocolNotificationPDU {
     /**
      * Construtor para criar a PDU a partir dos nós e do custo
      * 
-     * @param ripNodeA
-     * @param ripNodeB
-     * @param cost
-     * @throws InvalidRIPPDUException
+     * @param ripNodeA Nó A
+     * @param ripNodeB Nó B
+     * @param cost     Custo do Enlace entre A e B
+     * @throws InvalidRIPPDUException Exceção de PDU Inválida
      */
     public RoutingInformationProtocolNotificationPDU(short ripNodeA, short ripNodeB, int cost)
             throws InvalidRIPPDUException {

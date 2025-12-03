@@ -1,5 +1,10 @@
 package src.Routing.PDU;
 
+/**
+ * PDU para definir o custo do enlace entre dois nós.
+ * 
+ * @see src.Routing.RoutingInformationProtocol
+ */
 public class RoutingInformationProtocolSetPDU {
     /** Node A */
     private short ripNodeA;
@@ -16,10 +21,11 @@ public class RoutingInformationProtocolSetPDU {
     /**
      * Construtor para criar a PDU a partir dos nós e do custo
      * 
-     * @param ripNodeA
-     * @param ripNodeB
-     * @param cost
-     * @throws InvalidRIPPDUException
+     * @param ripNodeA Nó A
+     * @param ripNodeB Nó B
+     * @param cost     Custo do Enlace entre A e B
+     * 
+     * @throws InvalidRIPPDUException Exceção de PDU Inválida
      */
     public RoutingInformationProtocolSetPDU(short ripNodeA, short ripNodeB, int cost) throws InvalidRIPPDUException {
         this.ripNodeA = ripNodeA;
@@ -33,8 +39,9 @@ public class RoutingInformationProtocolSetPDU {
     /**
      * Construtor para criar a PDU a partir da mensagem
      * 
-     * @param ripset
-     * @throws InvalidRIPPDUException
+     * @param ripset mensagem da PDU
+     * 
+     * @throws InvalidRIPPDUException Exceção de PDU Inválida
      */
     public RoutingInformationProtocolSetPDU(String ripset) throws InvalidRIPPDUException {
         String[] words = ripset.split(" ");
@@ -88,7 +95,7 @@ public class RoutingInformationProtocolSetPDU {
     /**
      * Pega a mensagem da PDU
      * 
-     * @return
+     * @return Mensagem da PDU
      */
     public String getMessage() {
         return message;
@@ -97,7 +104,7 @@ public class RoutingInformationProtocolSetPDU {
     /**
      * Pega o nó A
      * 
-     * @return
+     * @return Nó A
      */
     public short getRipNodeA() {
         return ripNodeA;
@@ -106,7 +113,7 @@ public class RoutingInformationProtocolSetPDU {
     /**
      * Pega o nó B
      * 
-     * @return
+     * @return Nó B
      */
     public short getRipNodeB() {
         return ripNodeB;
@@ -115,7 +122,7 @@ public class RoutingInformationProtocolSetPDU {
     /**
      * Pega o custo do enlace entre os nodes
      * 
-     * @return
+     * @return custo do enlace
      */
     public int getCost() {
         return cost;

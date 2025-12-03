@@ -1,5 +1,11 @@
 package src.Routing.PDU;
 
+/**
+ * PDU de Requisição do Protocolo de Informação de Roteamento (RIP).
+ * Solicita a tabela de distância de um nó.
+ * 
+ * @see src.Routing.RoutingInformationProtocol
+ */
 public class RoutingInformationProtocolRequestPDU {
     /** Mensagem da PDU */
     private String message = "";
@@ -7,7 +13,7 @@ public class RoutingInformationProtocolRequestPDU {
     /**
      * Construtor para criar a PDU de requisição
      * 
-     * @throws InvalidRIPPDUException
+     * @throws InvalidRIPPDUException Exceção de PDU inválida
      */
     public RoutingInformationProtocolRequestPDU() throws InvalidRIPPDUException {
         this.message = "RIPRQT";
@@ -18,8 +24,9 @@ public class RoutingInformationProtocolRequestPDU {
     /**
      * Construtor para criar a PDU de requisição a partir da mensagem
      * 
-     * @param message
-     * @throws InvalidRIPPDUException
+     * @param message mensagem da PDU
+     * 
+     * @throws InvalidRIPPDUException exceção de PDU inválida
      */
     public RoutingInformationProtocolRequestPDU(String message) throws InvalidRIPPDUException {
         this.message = message;
@@ -55,7 +62,7 @@ public class RoutingInformationProtocolRequestPDU {
     /**
      * Pega a mensagem da PDU
      * 
-     * @return
+     * @return mensagem da PDU
      */
     public String getMessage() {
         return message;

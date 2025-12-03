@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
+/**
+ * Classe para carregar a configuração da rede a partir de um arquivo de
+ * topologia.
+ */
 public class LoadNetworkConf {
 
     /** Constante para indicar distância infinita */
@@ -21,7 +25,9 @@ public class LoadNetworkConf {
      * a matriz de adjacência atualizada e então filtra os vizinhos do nó
      * solicitado.
      * </p>
-     * * @param nodeId O id do nó (formato do protocolo, 1 a 15).
+     * 
+     * @param filePath Caminho do arquivo de topologia.
+     * @param nodeId   O id do nó (formato do protocolo, 1 a 15).
      * 
      * @return short[] Um array contendo apenas os IDs dos vizinhos diretos.
      */
@@ -87,8 +93,10 @@ public class LoadNetworkConf {
      * Lê o arquivo de topologia e retorna uma matriz ajustada dinamicamente.
      * O índice da matriz é ucsap_id - 1, então o nó 1, está representado pelo
      * índice 0.
-     * * @param filePath Caminho do arquivo.
-     * * @return int[][] Matriz com a distância até os vizinhos.
+     * 
+     * @param filePath Caminho do arquivo.
+     * 
+     * @return int[][] Matriz com a distância até os vizinhos.
      */
     public static int[][] loadTopology(String filePath) {
         // Cria uma matriz temporária para leitura

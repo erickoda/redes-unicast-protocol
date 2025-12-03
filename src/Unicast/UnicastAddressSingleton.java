@@ -118,6 +118,11 @@ public final class UnicastAddressSingleton {
         return Optional.of((short) unicastAddressOptional.get().getUcsapId());
     }
 
+    /**
+     * Retorna a lista de endereços das entidades.
+     * 
+     * @return UnicastAddress[] - lista de endereços das entidades.
+     */
     public synchronized UnicastAddress[] getUnicastAddresses() {
         return this.unicastAddresses;
     }

@@ -1,5 +1,11 @@
 package src.Routing.PDU;
 
+/**
+ * PDU de Resposta do Protocolo de Informação de Roteamento (RIP).
+ * Envia a tabela de distância de um nó.
+ * 
+ * @see src.Routing.RoutingInformationProtocol
+ */
 public class RoutingInformationProtocolResponsePDU {
     /** Nó */
     private short ripNode;
@@ -13,9 +19,10 @@ public class RoutingInformationProtocolResponsePDU {
     /**
      * Construtor para criar a PDU a partir do nó e da tabela de distância
      * 
-     * @param ripNode
-     * @param distanceTable
-     * @throws InvalidRIPPDUException
+     * @param ripNode       Nó
+     * @param distanceTable Tabela de distância
+     * 
+     * @throws InvalidRIPPDUException Exceção de PDU Inválida
      */
     public RoutingInformationProtocolResponsePDU(short ripNode, int[][] distanceTable) throws InvalidRIPPDUException {
         this.ripNode = ripNode;
@@ -42,8 +49,9 @@ public class RoutingInformationProtocolResponsePDU {
     /**
      * Construtor para criar a PDU a partir da mensagem
      * 
-     * @param message
-     * @throws InvalidRIPPDUException
+     * @param message mensagem da PDU
+     * 
+     * @throws InvalidRIPPDUException Exceção de PDU Inválida
      */
     public RoutingInformationProtocolResponsePDU(String message) throws InvalidRIPPDUException {
         this.message = message;
@@ -98,7 +106,7 @@ public class RoutingInformationProtocolResponsePDU {
     /**
      * Pega a mensagem da PDU
      * 
-     * @return
+     * @return mensagem
      */
     public String getMessage() {
         return this.message;
@@ -107,7 +115,7 @@ public class RoutingInformationProtocolResponsePDU {
     /**
      * Pega o nó
      * 
-     * @return
+     * @return Nó
      */
     public short getRipNode() {
         return ripNode;
@@ -116,7 +124,7 @@ public class RoutingInformationProtocolResponsePDU {
     /**
      * Pega a tabela de distância
      * 
-     * @return
+     * @return Tabela de distância
      */
     public int[][] getDistanceTable() {
         return distanceTable;

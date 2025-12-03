@@ -7,7 +7,7 @@ public interface RoutingProtocolManagementServiceUserInterface {
     /**
      * Imprime a Tabela de Distância de um nó específico.
      * 
-     * @param node
+     * @param node  Nó
      * @param table A tabela de distâncias.
      */
     public void distanceTableIndication(short node, int[][] table);
@@ -15,8 +15,8 @@ public interface RoutingProtocolManagementServiceUserInterface {
     /**
      * Imprime o custo do enlace entre dois nós.
      * 
-     * @param nodeA
-     * @param nodeB
+     * @param nodeA Nó B
+     * @param nodeB Nó A
      * @param cost  Custo do enlace.
      */
     public void linkCostIndication(short nodeA, short nodeB, int cost);

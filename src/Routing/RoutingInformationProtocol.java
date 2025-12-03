@@ -48,7 +48,8 @@ public class RoutingInformationProtocol
 
     /**
      * Retorna o serviço de unicast associado.
-     * * @return O serviço de unicast.
+     * 
+     * @return O serviço de unicast.
      */
     public UnicastServiceInterface getUnicastService() {
         return unicastService;
