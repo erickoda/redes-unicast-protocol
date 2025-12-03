@@ -23,23 +23,5 @@ class Main {
             }
             Thread.sleep(500);
         }
-
-        // int[] loadedDistanceVector =
-        // LoadNetworkConf.loadDistanceVector("./src/data/network_configuration.txt",
-        // (short) 1);
-
-        // short[] neighbours =
-        // LoadNetworkConf.loadNeighbourhood("./src/data/network_configuration.txt",
-        // (short) 1);
-
-        // for (int i = 0; i < loadedDistanceVector.length; i++) {
-        // System.out.print(loadedDistanceVector[i] + " ");
-        // }
-
-        // System.out.println();
-
-        // for (int i = 0; i < neighbours.length; i++) {
-        // System.out.print(neighbours[i] + " ");
-        // }
     }
 }

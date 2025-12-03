@@ -23,11 +23,9 @@ public class Node implements RoutingInformationProtocolStrategy {
 
     /**
      * Tabela de Distância.
-     * <p>
+     * 
      * Matriz onde as linhas representam os vizinhos e as colunas os destinos.
-     * A linha correspondente ao próprio nó (índice 0 ou mapeado pelo ID)
-     * contém o vetor de distância do próprio nó.
-     * </p>
+     * 
      */
     private int[][] distanceTable;
 
@@ -151,6 +149,11 @@ public class Node implements RoutingInformationProtocolStrategy {
 
     /**
      * Trata a recepção de uma PDU RIPGET (Solicitação de Custo).
+     * 
+     * @param source  O ID da entidade que enviou a mensagem.
+     * @param message A string contendo a PDU recebida.
+     * 
+     * @throws InvalidRIPPDUException Se a PDU for inválida.
      */
     private void handleRipGet(short source, String message) throws InvalidRIPPDUException {
         if (nodeState == NodeStateEnum.Idle) {
@@ -168,6 +171,11 @@ public class Node implements RoutingInformationProtocolStrategy {
 
     /**
      * Trata a recepção de uma PDU RIPSET (Definição de Custo).
+     * 
+     * @param source  O ID da entidade que enviou a mensagem.
+     * @param message A string contendo a PDU recebida.
+     * 
+     * @throws InvalidRIPPDUException Se a PDU for inválida.
      */
     private void handleRipSet(short source, String message) throws InvalidRIPPDUException {
         if (this.nodeState == NodeStateEnum.Idle) {
@@ -208,6 +216,10 @@ public class Node implements RoutingInformationProtocolStrategy {
 
     /**
      * Trata a recepção de uma PDU RIPIND (Vetor de Distância de Vizinho).
+     * 
+     * @param message A string contendo a PDU recebida.
+     * 
+     * @throws InvalidRIPPDUException Se a PDU for inválida.
      */
     private void handleRipInd(String message) throws InvalidRIPPDUException {
         if (this.nodeState == NodeStateEnum.Idle) {
@@ -239,6 +251,11 @@ public class Node implements RoutingInformationProtocolStrategy {
 
     /**
      * Trata a recepção de uma PDU RIPRQT (Solicitação de Tabela).
+     * 
+     * @param source  O ID da entidade que enviou a mensagem.
+     * @param message A string contendo a PDU recebida.
+     * 
+     * @throws InvalidRIPPDUException Se a PDU for inválida.
      */
     private void handleRipRqt(short source, String message) throws InvalidRIPPDUException {
         if (nodeState == NodeStateEnum.Idle) {
@@ -253,6 +270,11 @@ public class Node implements RoutingInformationProtocolStrategy {
         }
     }
 
+    /**
+     * Recalcula o vetor de distância do nó.
+     * 
+     * @return true se o vetor de distância foi alterado, false caso contrário.
+     */
     private boolean recalculateDistaceVector() {
         boolean hasChanged = false;
         int vectorSize = this.distanceTable[0].length;
@@ -296,6 +318,13 @@ public class Node implements RoutingInformationProtocolStrategy {
         return hasChanged;
     }
 
+    /**
+     * Retorna o custo do enlace para um nó vizinho específico.
+     * 
+     * @param nodeUcsapId O ID UCSAP do nó vizinho.
+     * 
+     * @return O custo do enlace ou -1 se o nó não for vizinho.
+     */
     private int getCustoEnlace(int nodeUcsapId) {
         for (int i = 0; i < this.neighboursUcsapId.length; i++) {
             if (nodeUcsapId == this.neighboursUcsapId[i]) {
@@ -338,7 +367,6 @@ public class Node implements RoutingInformationProtocolStrategy {
      * Timeout para atualizar vetores de distância
      */
     private void timeoutPropagation() {
-        System.out.println("Estado atual do nó " + this.ucsapId + " :" + this.nodeState);
         if (this.nodeState == NodeStateEnum.Idle) {
             this.nodeState = NodeStateEnum.VectorPropagation;
 

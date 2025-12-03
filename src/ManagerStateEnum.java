@@ -1,5 +1,8 @@
 package src;
 
+/**
+ * Estados possíveis do Gerente de Roteamento
+ */
 public enum ManagerStateEnum {
     Idle,
     LinkCostRequest,
