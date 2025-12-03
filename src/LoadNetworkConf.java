@@ -50,7 +50,7 @@ public class LoadNetworkConf {
         // Ordena os vizinhos em ordem crescente
         Collections.sort(neighborList);
 
-        // CONVERSÃO MANUAL DE List<Short> PARA short[]
+        // Conversão de List<Short> PARA short[]
         short[] result = new short[neighborList.size()];
         for (int i = 0; i < neighborList.size(); i++) {
             result[i] = neighborList.get(i);
@@ -94,7 +94,7 @@ public class LoadNetworkConf {
         // Cria uma matriz temporária para leitura
         int[][] tempMatrix = new int[MAX_NODES][MAX_NODES];
 
-        // Inicializa buffer com INFINITY e 0 na diagonal
+        // Inicializa com INFINITY e 0 na diagonal
         for (int i = 0; i < MAX_NODES; i++) {
             for (int j = 0; j < MAX_NODES; j++) {
                 if (i == j)
@@ -122,10 +122,8 @@ public class LoadNetworkConf {
                         int nodeB = Integer.parseInt(parts[1]);
                         int cost = Integer.parseInt(parts[2]);
 
-                        // Validação Crítica: O nó 0 (Gerente) não entra na topologia
                         if (isValidNodeId(nodeA) && isValidNodeId(nodeB)) {
 
-                            // Registra na matriz temporária (ajustando para índice 0-based)
                             tempMatrix[nodeA - 1][nodeB - 1] = cost;
                             tempMatrix[nodeB - 1][nodeA - 1] = cost;
 

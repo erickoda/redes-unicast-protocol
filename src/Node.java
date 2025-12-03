@@ -10,11 +10,10 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Implementa a estratégia de roteamento para a Entidade Nó (ID 1-15).
- * <p>
+ * 
  * Esta classe é responsável por manter a tabela de distâncias, processar as
- * PDUs
- * de roteamento e executar o algoritmo de vetor de distância.
- * </p>
+ * PDUs de roteamento e executar o algoritmo de vetor de distância.
+ * 
  */
 public class Node implements RoutingInformationProtocolStrategy {
 
@@ -32,7 +31,7 @@ public class Node implements RoutingInformationProtocolStrategy {
     /** Armazena o ucsap_id dos nós vizinhos */
     private short[] neighboursUcsapId;
 
-    /** Custo direto para os vizinhos (Topologia Física). */
+    /** Custo direto para os vizinhos (enlace). */
     private int[] custoParaVizinho;
 
     /** Armazena o estado atual da máquina de estados do nó. */
@@ -46,7 +45,7 @@ public class Node implements RoutingInformationProtocolStrategy {
      */
     private final ScheduledExecutorService scheduler;
 
-    /** Intervalo de tempo para o broadcast periódico (padrão 10s). */
+    /** Intervalo de tempo para o broadcast periódico. */
     private final int timeoutSeconds;
 
     /**
@@ -159,7 +158,6 @@ public class Node implements RoutingInformationProtocolStrategy {
         if (nodeState == NodeStateEnum.Idle) {
             RoutingInformationProtocolGetPDU receivedPDU = new RoutingInformationProtocolGetPDU(message);
 
-            // Inicializa o custo como neg inf
             int cost = getCustoEnlace(receivedPDU.getRipNodeB());
 
             RoutingInformationProtocolNotificationPDU sendPDU = new RoutingInformationProtocolNotificationPDU(
@@ -260,10 +258,11 @@ public class Node implements RoutingInformationProtocolStrategy {
      */
     private void handleRipRqt(short source, String message) throws InvalidRIPPDUException {
         if (nodeState == NodeStateEnum.Idle) {
-            RoutingInformationProtocolRequestPDU receivedPDU = new RoutingInformationProtocolRequestPDU(message);
+            // Verifica se a PDU é válida
+            new RoutingInformationProtocolRequestPDU(message);
+
             short manager = 0;
 
-            // Monta resposta com a tabela completa
             RoutingInformationProtocolResponsePDU sendPDU = new RoutingInformationProtocolResponsePDU(
                     manager, this.distanceTable);
 
@@ -287,7 +286,7 @@ public class Node implements RoutingInformationProtocolStrategy {
                 continue;
             }
 
-            int menorCaminhoEncontrado = -1; // Começamos assumindo Infinito
+            int menorCaminhoEncontrado = -1;
 
             for (int i = 1; i < this.distanceTable.length; i++) {
 

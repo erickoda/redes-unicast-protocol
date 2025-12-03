@@ -21,8 +21,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class Manager implements RoutingInformationProtocolStrategy {
 
-    /** Referência ao contexto para acessar Unicast e Callbacks */
-    private final RoutingInformationProtocol context;
+    /** Referência ao rip para acessar Unicast */
+    private final RoutingInformationProtocol rip;
 
     /** Executor para gerenciar os timers */
     private final ScheduledExecutorService scheduler;
@@ -37,10 +37,12 @@ public class Manager implements RoutingInformationProtocolStrategy {
     private ManagerStateEnum currentState = ManagerStateEnum.Idle;
 
     // --- Variáveis temporárias para controle de fluxo e retransmissão ---
-    private short targetNode; // Nó de quem esperamos resposta
-    private String lastPduSent; // Última mensagem enviada (para retransmissão)
+    /** Nó de quem esperamos resposta */
+    private short targetNode;
+    /** Última mensagem enviada (para retransmissão) */
+    private String lastPduSent;
 
-    // Variáveis específicas para a transição complexa de SetLinkCost
+    // Variáveis específicas para a transição SetLinkCost
     private short tempNodeA;
     private short tempNodeB;
     private int tempCost;
@@ -48,11 +50,11 @@ public class Manager implements RoutingInformationProtocolStrategy {
     /**
      * Construtor da estratégia do Gerente.
      * 
-     * @param context        Contexto principal do protocolo.
+     * @param rip            Routing Information Protocol.
      * @param timeoutSeconds Tempo em segundos para retransmissão.
      */
-    public Manager(RoutingInformationProtocol context, int timeoutSeconds) {
-        this.context = context;
+    public Manager(RoutingInformationProtocol rip, int timeoutSeconds) {
+        this.rip = rip;
         this.TIMEOUT_SECONDS = timeoutSeconds;
         this.scheduler = Executors.newScheduledThreadPool(1);
     }
@@ -87,7 +89,7 @@ public class Manager implements RoutingInformationProtocolStrategy {
      * @param words
      */
     private void handleRipNtf(short source, String[] words) {
-        // Validação de segurança: só aceita se vier do nó que estamos aguardando
+        // Validação: só aceita se vier do nó que estamos aguardando
         if (source != targetNode)
             return;
 
@@ -96,11 +98,11 @@ public class Manager implements RoutingInformationProtocolStrategy {
             stopRetransmissionTimer();
             currentState = ManagerStateEnum.Idle;
 
-            // Notifica aplicação: linkCostIndication(nodeA, nodeB, cost)
+            // Notifica aplicação
             for (int i = 0; i < words.length; i++)
                 System.out.print(words[i] + " ");
             System.out.println();
-            context.notifyLinkCostIndication(
+            rip.notifyLinkCostIndication(
                     Short.parseShort(words[1]),
                     Short.parseShort(words[2]),
                     Integer.parseInt(words[3]));
@@ -109,16 +111,12 @@ public class Manager implements RoutingInformationProtocolStrategy {
         else if (currentState == ManagerStateEnum.LinkCostSetRequest_1) {
             stopRetransmissionTimer();
 
-            // Recebemos OK do Nó A. Agora precisamos enviar para o Nó B.
-            // Usamos os dados temporários guardados no executeSetLinkCost
             this.targetNode = tempNodeB;
 
-            // Cria a PDU para o Nó B: RIPSET B A Cost
             RoutingInformationProtocolSetPDU nextPDU = new RoutingInformationProtocolSetPDU(tempNodeB, tempNodeA,
                     tempCost);
-            this.lastPduSent = nextPDU.getMessage(); // Assumindo método getMessage() ou getFrame()
+            this.lastPduSent = nextPDU.getMessage();
 
-            // Avança estado e inicia novo ciclo de envio/timer
             currentState = ManagerStateEnum.LinkCostSetRequest_2;
             sendAndStartTimer(targetNode, lastPduSent);
         }
@@ -128,7 +126,7 @@ public class Manager implements RoutingInformationProtocolStrategy {
             currentState = ManagerStateEnum.Idle;
 
             // Notifica aplicação que a operação completa (A e B) terminou
-            context.notifyLinkCostIndication(tempNodeA, tempNodeB, tempCost);
+            rip.notifyLinkCostIndication(tempNodeA, tempNodeB, tempCost);
         }
     }
 
@@ -147,13 +145,10 @@ public class Manager implements RoutingInformationProtocolStrategy {
             stopRetransmissionTimer();
             currentState = ManagerStateEnum.Idle;
 
-            // Parse da PDU de resposta
             RoutingInformationProtocolResponsePDU pdu = new RoutingInformationProtocolResponsePDU(message);
 
-            // Notifica a aplicação passando a tabela parseada
-            // (Assumindo que getDistanceTable() retorna int[][])
-            // Se sua PDU retorna outro formato, ajuste aqui.
-            context.notifyDistanceTableIndication(source, pdu.getDistanceTable());
+            // Notifica a aplicação passando a tabela de distâncias
+            rip.notifyDistanceTableIndication(source, pdu.getDistanceTable());
         }
     }
 
@@ -219,7 +214,7 @@ public class Manager implements RoutingInformationProtocolStrategy {
      */
     private void sendAndStartTimer(short dest, String msg) {
         // Envia a primeira vez
-        context.getUnicastService().UPDataReq(dest, msg);
+        rip.getUnicastService().UPDataReq(dest, msg);
 
         // Agenda a retransmissão caso não haja resposta
         startRetransmissionTimer(dest, msg);
@@ -239,7 +234,7 @@ public class Manager implements RoutingInformationProtocolStrategy {
             System.out.println("[TIMEOUT MANAGER] Sem resposta. Reenviando para " + node + ": " + pdu);
 
             // Reenvia
-            context.getUnicastService().UPDataReq(node, pdu);
+            rip.getUnicastService().UPDataReq(node, pdu);
 
             // Reagendar recursivamente
             startRetransmissionTimer(node, pdu);

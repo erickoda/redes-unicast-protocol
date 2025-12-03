@@ -21,7 +21,7 @@ public class RoutingInformationProtocol
     /** O serviço de transferência Unicast */
     private UnicastServiceInterface unicastService;
 
-    /** A interface para notificar a aplicação de gerenciamento (callbacks) */
+    /** A interface para notificar a aplicação de gerenciamento */
     private RoutingProtocolManagementServiceUserInterface managementInterface;
 
     /** A estratégia ativa (Lógica de Nó ou Lógica de Gerente) */
@@ -55,10 +55,10 @@ public class RoutingInformationProtocol
     }
 
     /**
-     * Define a interface de gerenciamento para enviar notificações (callbacks) à
+     * Define a interface de gerenciamento para enviar notificações à
      * aplicação.
      * 
-     * @param managementInterface A interface de callback.
+     * @param managementInterface A interface para enviar notificações.
      */
     public void setManagementInterface(RoutingProtocolManagementServiceUserInterface managementInterface) {
         this.managementInterface = managementInterface;
@@ -97,7 +97,6 @@ public class RoutingInformationProtocol
      */
     @Override
     public void UPDataInd(short source, String message) {
-        // Delega o processamento para a estratégia ativa (Nó ou Gerente)
         strategy.handleMessage(source, message);
     }
 
