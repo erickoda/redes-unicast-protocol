@@ -1,7 +1,8 @@
 package src.Unicast.Exception;
 
 /**
- * Exceção lançada para indicar que uma PDU é inválida.
+ * Exceção lançada para indicar que uma PDU do Protocolo Unicast
+ * é inválida.
  *
  * @see java.lang.Exception
  */

@@ -1,145 +1,45 @@
 package src;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.Scanner;
 
 import src.Routing.RoutingInformationProtocol;
+import src.Routing.RoutingManagementApplication;
 import src.Unicast.UnicastAddress;
 import src.Unicast.UnicastAddressSingleton;
-import src.Unicast.UnicastPDU;
-import src.Unicast.UnicastProtocol;
-import src.Unicast.UnicastReceivedMessagesSingleton;
 
 class Main {
 
-    public static void main(String[] args) {
-        Scanner sc;
-        String command;
-        String[] commandWords;
-        short nodeUcsapId = 0;
-        UnicastProtocol unicastProtocol;
-        RoutingInformationProtocol routingInformationProtocol;
+    public static void main(String[] args) throws Exception {
+        UnicastAddressSingleton unicastAddressSingleton = UnicastAddressSingleton.getInstance();
+        ArrayList<RoutingInformationProtocol> nodes = new ArrayList<RoutingInformationProtocol>();
+        RoutingManagementApplication routingManagementApplication;
 
-        if (args.length == 0) {
-            System.err.println("[ERROR]: SPECIFY THE UCSAP_ID BY COMMAND LINE");
-            System.exit(1);
-        }
-
-        try {
-            nodeUcsapId = Short.parseShort(args[0]);
-        } catch (NumberFormatException numberFormatException) {
-            System.err.println("[ERROR]: INVALID UCSAP_ID FORMAT! IT IS NOT A VALID SHORT NUMBER");
-            System.exit(1);
-        }
-
-        // Imprime informação do node atual
-        displayNodeAddressInformation(nodeUcsapId);
-
-        // Inicialização dos objetos de protocolo e roteamento e variáveis
-        command = "";
-        sc = new Scanner(System.in);
-        unicastProtocol = new UnicastProtocol(nodeUcsapId);
-        routingInformationProtocol = new RoutingInformationProtocol();
-
-        unicastProtocol.setUserService(routingInformationProtocol);
-        routingInformationProtocol.setUnicastService(unicastProtocol);
-
-        // Thread para receber mensagens
-        new Thread(unicastProtocol).start();
-
-        while (!command.equals("exit")) {
-
-            // Imprime lista de comandos na tela
-            printCommandList();
-
-            // Lê o comando
-            command = sc.nextLine();
-            commandWords = command.split(" ");
-
-            switch (commandWords[0].toLowerCase()) {
-                case "send":
-                    sendMessage(commandWords, unicastProtocol);
-                    break;
-                case "read":
-                    readMessages();
-                    break;
-                case "exit":
-                    break;
-                default:
-                    System.out.println("[ERROR]: INVALID COMMAND");
-                    break;
-            }
-        }
-
-        unicastProtocol.closeSocket();
-        sc.close();
-    }
-
-    static void printCommandList() {
-        System.out.println("=========================================================");
-        System.out.println("| Commands:                                             |");
-        System.out.println("| Send a message: send<space><ucsap_id><space><message> |");
-        System.out.println("| Read Messages: read                                   |");
-        System.out.println("| Exit: exit                                            |");
-        System.out.println("=========================================================");
-    }
-
-    static void readMessages() {
-        UnicastReceivedMessagesSingleton unicastReceivedMessagesSingleton = UnicastReceivedMessagesSingleton
-                .getInstance();
-
-        ArrayList<UnicastPDU> pduMessages = unicastReceivedMessagesSingleton.getMessages();
-
-        for (UnicastPDU pduMessage : pduMessages) {
-            System.out.println(pduMessage.getMessage());
-        }
-    }
-
-    static void sendMessage(String[] commandWords, UnicastProtocol unicastProtocol) {
-        short destination;
-        String message;
-
-        if (commandWords.length < 3) {
-            System.err.println(
-                    "[ERROR]: INVALID COMMAND FORMAT. Use send<space><ucsap_id><space><message>. Example: send 0 Hello! How are you?");
-        }
-
-        try {
-            destination = Short.parseShort(commandWords[1]);
-            message = String.join(" ",
-                    Arrays.copyOfRange(commandWords, 2, commandWords.length));
-
-            System.out.println("[SENDING...]: " + message + " to destination " + destination);
-
-            boolean hasSend = unicastProtocol.UPDataReq(destination, message);
-            if (!hasSend) {
-                System.out.println("[FAIL]: FAILED TO SEND THE MESSAGE");
+        for (UnicastAddress address : unicastAddressSingleton.getUnicastAddresses()) {
+            RoutingInformationProtocol rip = new RoutingInformationProtocol(address.getUcsapId(), 5);
+            if (address.getUcsapId() == 0) {
+                routingManagementApplication = new RoutingManagementApplication(rip);
             } else {
-                System.out.println("[SUCCESS]: SENT THE MESSAGE");
+                nodes.add(rip);
             }
-        } catch (NumberFormatException numberFormatException) {
-            System.out.println(
-                    "[ERROR]: The ucsap_id '" + commandWords[1] + "' is not a valid short number.");
-        }
-    }
-
-    static void displayNodeAddressInformation(short nodeUcsapId) {
-        UnicastAddressSingleton unicastAddresses;
-        Optional<UnicastAddress> unicastAddressOptional;
-        UnicastAddress unicastAddress;
-
-        unicastAddresses = UnicastAddressSingleton.getInstance();
-        unicastAddressOptional = unicastAddresses.getUnicastAddressFrom(nodeUcsapId);
-
-        if (unicastAddressOptional.isEmpty()) {
-            System.err.println("[ERROR]: NODE NOT FOUND ON ENTITY CONFIGURATION FILE");
-            System.exit(1);
+            Thread.sleep(500);
         }
 
-        unicastAddress = unicastAddressOptional.get();
-        System.out.println(unicastAddress.getUcsapId() + " " + unicastAddress.getInetAddress().toString() + ":"
-                + unicastAddress.getPortNumber());
+        // int[] loadedDistanceVector =
+        // LoadNetworkConf.loadDistanceVector("./src/data/network_configuration.txt",
+        // (short) 1);
+
+        // short[] neighbours =
+        // LoadNetworkConf.loadNeighbourhood("./src/data/network_configuration.txt",
+        // (short) 1);
+
+        // for (int i = 0; i < loadedDistanceVector.length; i++) {
+        // System.out.print(loadedDistanceVector[i] + " ");
+        // }
+
+        // System.out.println();
+
+        // for (int i = 0; i < neighbours.length; i++) {
+        // System.out.print(neighbours[i] + " ");
+        // }
     }
 }

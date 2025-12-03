@@ -117,4 +117,8 @@ public final class UnicastAddressSingleton {
 
         return Optional.of((short) unicastAddressOptional.get().getUcsapId());
     }
+
+    public synchronized UnicastAddress[] getUnicastAddresses() {
+        return this.unicastAddresses;
+    }
 }

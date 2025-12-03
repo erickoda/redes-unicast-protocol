@@ -32,6 +32,8 @@ public class UnicastProtocol implements UnicastServiceInterface, Runnable {
 
     private volatile boolean running = true;
 
+    private short ucsapId;
+
     /**
      * Constrói a instância unicast para um dado Node
      * <p>
@@ -45,6 +47,7 @@ public class UnicastProtocol implements UnicastServiceInterface, Runnable {
     public UnicastProtocol(short ucsapId) {
         UnicastAddressSingleton unicastAddressSingleton = UnicastAddressSingleton.getInstance();
         Optional<UnicastAddress> unicastAddressOptional = unicastAddressSingleton.getUnicastAddressFrom(ucsapId);
+        this.ucsapId = ucsapId;
 
         if (unicastAddressOptional.isEmpty()) {
             System.err.println("[ERROR]: INVALID NODE UCSAP_ID");
@@ -54,7 +57,10 @@ public class UnicastProtocol implements UnicastServiceInterface, Runnable {
         try {
             this.datagramSocket = new DatagramSocket(unicastAddressOptional.get().getPortNumber());
         } catch (IOException ioException) {
-            System.err.println("[ERROR]: failed to create socket");
+            System.err.println(ioException);
+            System.err.println("[ERROR]: failed to create socket (id: " + ucsapId + ", address: "
+                    + unicastAddressOptional.get().getInetAddress() + ":"
+                    + unicastAddressOptional.get().getPortNumber());
             System.exit(1);
         }
     }
@@ -135,7 +141,7 @@ public class UnicastProtocol implements UnicastServiceInterface, Runnable {
 
             ucsapId = ucsapIdOptional.get();
 
-            this.userService.UPDataInd(ucsapId, unicastPDU.getMessage());
+            this.userService.UPDataInd(ucsapId, unicastPDU.getMessageWithoutHeaders());
 
         } catch (IOException ioException) {
             if (running) {
@@ -186,7 +192,8 @@ public class UnicastProtocol implements UnicastServiceInterface, Runnable {
             inetAddress = destinationAddress.getInetAddress();
             portNumber = destinationAddress.getPortNumber();
 
-            System.out.println("[SENDING...]: sending message to " + inetAddress.toString() + ":" + portNumber
+            System.out.println("[SENDING...]: from " + this.ucsapId + " sending message to " + inetAddress.toString()
+                    + ":" + portNumber
                     + ". Content: " + unicastPDU.getMessage());
 
             datagramPacket = new DatagramPacket(

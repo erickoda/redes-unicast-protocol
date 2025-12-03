@@ -64,6 +64,20 @@ public class UnicastPDU {
     }
 
     /**
+     * Pega a mensagem sem os cabeçalhos
+     * <p>
+     * Retorna a mensagem sem os cabeçalhos de controle (UPDREQPDU e tamanho dos
+     * dados)
+     * </p>
+     * 
+     * @return mensagem sem os cabeçalhos
+     */
+    public String getMessageWithoutHeaders() {
+        String[] parts = this.message.split(" ", 3);
+        return parts[2];
+    }
+
+    /**
      * Verifica se a mensagem é válida
      * <p>
      * Verifica se a mensagem é nula, tem tamanho inválido ou se houve algum erro na
