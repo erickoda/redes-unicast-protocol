@@ -32,8 +32,6 @@ public class UnicastProtocol implements UnicastServiceInterface, Runnable {
 
     private volatile boolean running = true;
 
-    private short ucsapId;
-
     /**
      * Constrói a instância unicast para um dado Node
      * <p>
@@ -47,7 +45,6 @@ public class UnicastProtocol implements UnicastServiceInterface, Runnable {
     public UnicastProtocol(short ucsapId) {
         UnicastAddressSingleton unicastAddressSingleton = UnicastAddressSingleton.getInstance();
         Optional<UnicastAddress> unicastAddressOptional = unicastAddressSingleton.getUnicastAddressFrom(ucsapId);
-        this.ucsapId = ucsapId;
 
         if (unicastAddressOptional.isEmpty()) {
             System.err.println("[ERROR]: INVALID NODE UCSAP_ID");
