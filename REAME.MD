@@ -14,7 +14,8 @@ javac -d bin -sourcepath src src/Main.java src/*.java src/Routing/*.java src/Rou
 
 jar cvfm RedesProjeto.jar manifest.txt -C bin .
 
-sudo java -jar RedesProjeto.jar
+# Pode ser necessário usar sudo para rodar o .jar
+java -jar RedesProjeto.jar
 ```
 
 ## Generate javadocs
