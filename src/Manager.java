@@ -2,6 +2,7 @@ package src;
 
 import src.Routing.RoutingInformationProtocol;
 import src.Routing.RoutingInformationProtocolStrategy;
+import src.Routing.PDU.InvalidRIPPDUException;
 import src.Routing.PDU.RoutingInformationProtocolGetPDU;
 import src.Routing.PDU.RoutingInformationProtocolRequestPDU;
 import src.Routing.PDU.RoutingInformationProtocolSetPDU;
@@ -109,16 +110,21 @@ public class Manager implements RoutingInformationProtocolStrategy {
         }
         // Transição: LinkCostSetRequest_1 -> LinkCostSetRequest_2
         else if (currentState == ManagerStateEnum.LinkCostSetRequest_1) {
-            stopRetransmissionTimer();
+            try {
+                stopRetransmissionTimer();
 
-            this.targetNode = tempNodeB;
+                this.targetNode = tempNodeB;
 
-            RoutingInformationProtocolSetPDU nextPDU = new RoutingInformationProtocolSetPDU(tempNodeB, tempNodeA,
-                    tempCost);
-            this.lastPduSent = nextPDU.getMessage();
+                RoutingInformationProtocolSetPDU nextPDU = new RoutingInformationProtocolSetPDU(tempNodeB, tempNodeA,
+                        tempCost);
+                this.lastPduSent = nextPDU.getMessage();
 
-            currentState = ManagerStateEnum.LinkCostSetRequest_2;
-            sendAndStartTimer(targetNode, lastPduSent);
+                currentState = ManagerStateEnum.LinkCostSetRequest_2;
+                sendAndStartTimer(targetNode, lastPduSent);
+            } catch (InvalidRIPPDUException e) {
+                System.err.println("[ERRO] Falha ao criar PDU de configuração de custo de link (etapa 2).");
+            }
+
         }
         // Transição: LinkCostSetRequest_2 -> Idle
         else if (currentState == ManagerStateEnum.LinkCostSetRequest_2) {
@@ -142,13 +148,17 @@ public class Manager implements RoutingInformationProtocolStrategy {
 
         // Transição: DistanceTableRequest -> Idle
         if (currentState == ManagerStateEnum.DistanceTableRequest) {
-            stopRetransmissionTimer();
-            currentState = ManagerStateEnum.Idle;
+            try {
+                stopRetransmissionTimer();
+                currentState = ManagerStateEnum.Idle;
 
-            RoutingInformationProtocolResponsePDU pdu = new RoutingInformationProtocolResponsePDU(message);
+                RoutingInformationProtocolResponsePDU pdu = new RoutingInformationProtocolResponsePDU(message);
 
-            // Notifica a aplicação passando a tabela de distâncias
-            rip.notifyDistanceTableIndication(source, pdu.getDistanceTable());
+                // Notifica a aplicação passando a tabela de distâncias
+                rip.notifyDistanceTableIndication(source, pdu.getDistanceTable());
+            } catch (InvalidRIPPDUException e) {
+                System.err.println("[ERRO] PDU RIPRSP inválida recebida do nó " + source);
+            }
         }
     }
 
@@ -159,13 +169,19 @@ public class Manager implements RoutingInformationProtocolStrategy {
             return false;
         }
 
-        this.targetNode = nodeA;
-        RoutingInformationProtocolGetPDU pdu = new RoutingInformationProtocolGetPDU(nodeA, nodeB);
-        this.lastPduSent = pdu.getMessage();
+        try {
+            this.targetNode = nodeA;
+            RoutingInformationProtocolGetPDU pdu = new RoutingInformationProtocolGetPDU(nodeA, nodeB);
+            this.lastPduSent = pdu.getMessage();
 
-        currentState = ManagerStateEnum.LinkCostRequest;
-        sendAndStartTimer(targetNode, lastPduSent);
-        return true;
+            currentState = ManagerStateEnum.LinkCostRequest;
+            sendAndStartTimer(targetNode, lastPduSent);
+            return true;
+        } catch (InvalidRIPPDUException e) {
+            System.err.println("[ERRO] Falha ao criar PDU de requisição de custo de link.");
+            return false;
+        }
+
     }
 
     @Override
@@ -175,19 +191,25 @@ public class Manager implements RoutingInformationProtocolStrategy {
             return false;
         }
 
-        // Armazena dados necessários para a segunda etapa (quando formos enviar para B)
-        this.tempNodeA = nodeA;
-        this.tempNodeB = nodeB;
-        this.tempCost = cost;
+        try {
+            // Armazena dados necessários para a segunda etapa (quando formos enviar para B)
+            this.tempNodeA = nodeA;
+            this.tempNodeB = nodeB;
+            this.tempCost = cost;
 
-        // Começa enviando para A
-        this.targetNode = nodeA;
-        RoutingInformationProtocolSetPDU pdu = new RoutingInformationProtocolSetPDU(nodeA, nodeB, cost);
-        this.lastPduSent = pdu.getMessage();
+            // Começa enviando para A
+            this.targetNode = nodeA;
+            RoutingInformationProtocolSetPDU pdu = new RoutingInformationProtocolSetPDU(nodeA, nodeB, cost);
+            this.lastPduSent = pdu.getMessage();
 
-        currentState = ManagerStateEnum.LinkCostSetRequest_1;
-        sendAndStartTimer(targetNode, lastPduSent);
-        return true;
+            currentState = ManagerStateEnum.LinkCostSetRequest_1;
+            sendAndStartTimer(targetNode, lastPduSent);
+            return true;
+        } catch (InvalidRIPPDUException e) {
+            System.err.println("[ERRO] Falha ao criar PDU de configuração de custo de link.");
+            return false;
+        }
+
     }
 
     @Override
@@ -197,13 +219,18 @@ public class Manager implements RoutingInformationProtocolStrategy {
             return false;
         }
 
-        this.targetNode = node;
-        RoutingInformationProtocolRequestPDU pdu = new RoutingInformationProtocolRequestPDU();
-        this.lastPduSent = pdu.getMessage();
+        try {
+            this.targetNode = node;
+            RoutingInformationProtocolRequestPDU pdu = new RoutingInformationProtocolRequestPDU();
+            this.lastPduSent = pdu.getMessage();
 
-        currentState = ManagerStateEnum.DistanceTableRequest;
-        sendAndStartTimer(targetNode, lastPduSent);
-        return true;
+            currentState = ManagerStateEnum.DistanceTableRequest;
+            sendAndStartTimer(targetNode, lastPduSent);
+            return true;
+        } catch (InvalidRIPPDUException e) {
+            System.err.println("[ERRO] Falha ao criar PDU de requisição de tabela de distâncias.");
+            return false;
+        }
     }
 
     /**

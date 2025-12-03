@@ -5,7 +5,7 @@ public class RoutingInformationProtocolResponsePDU {
     private int[][] distanceTable;
     private String message = "";
 
-    public RoutingInformationProtocolResponsePDU(short ripNode, int[][] distanceTable) {
+    public RoutingInformationProtocolResponsePDU(short ripNode, int[][] distanceTable) throws InvalidRIPPDUException {
         this.ripNode = ripNode;
         this.distanceTable = distanceTable;
 
@@ -23,9 +23,11 @@ public class RoutingInformationProtocolResponsePDU {
                 this.message += " ";
             }
         }
+
+        this.validatePDU();
     }
 
-    public RoutingInformationProtocolResponsePDU(String message) {
+    public RoutingInformationProtocolResponsePDU(String message) throws InvalidRIPPDUException {
         this.message = message;
         String[] words = message.split(" ");
         this.distanceTable = new int[words.length - 2][];
@@ -40,6 +42,38 @@ public class RoutingInformationProtocolResponsePDU {
 
             this.distanceTable[i - 2] = distanceVector;
         }
+
+        this.validatePDU();
+    }
+
+    /**
+     * Valida a PDU
+     * 
+     * @throws InvalidRIPPDUException
+     */
+    private void validatePDU() throws InvalidRIPPDUException {
+        if (!this.message.startsWith("RIPRSP")) {
+            throw new InvalidRIPPDUException("Mensagem não inicia com RIPRSP");
+        }
+
+        if (this.ripNode < 1 || this.ripNode > 15) {
+            throw new InvalidRIPPDUException("Nó inválido");
+        }
+
+        if (!isByteSizeValid()) {
+            throw new InvalidRIPPDUException("Tamanho da PDU excede 512 bytes");
+        }
+    }
+
+    /**
+     * Verifica se o tamanho da PDU em bytes é válido
+     * 
+     * @return se o tamanho é válido
+     */
+    private boolean isByteSizeValid() {
+        byte[] bytes = this.message.getBytes();
+
+        return bytes.length <= 512;
     }
 
     public String getMessage() {

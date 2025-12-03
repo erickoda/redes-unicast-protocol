@@ -340,11 +340,19 @@ public class Node implements RoutingInformationProtocolStrategy {
      */
     private void propagateDistanceVector() {
         for (short neighbourUcsapId : neighboursUcsapId) {
-            RoutingInformationProtocolIndicationPDU ripIndicationPDU = new RoutingInformationProtocolIndicationPDU(
-                    this.ucsapId, this.distanceTable[0]);
+            try {
 
-            this.routingInformationProtocol.getUnicastService().UPDataReq(neighbourUcsapId,
-                    ripIndicationPDU.getMessage());
+                RoutingInformationProtocolIndicationPDU ripIndicationPDU = new RoutingInformationProtocolIndicationPDU(
+                        this.ucsapId, this.distanceTable[0]);
+
+                this.routingInformationProtocol.getUnicastService().UPDataReq(neighbourUcsapId,
+                        ripIndicationPDU.getMessage());
+            } catch (InvalidRIPPDUException e) {
+                System.err.println("[ERRO]: Falha ao criar RIPIND para propagação do vetor de distância");
+                e.printStackTrace();
+                continue;
+            }
+
         }
     }
 

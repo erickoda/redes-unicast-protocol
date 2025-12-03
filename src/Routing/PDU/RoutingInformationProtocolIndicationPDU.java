@@ -5,7 +5,7 @@ public class RoutingInformationProtocolIndicationPDU {
     private int[] distanceVector;
     private String message = "";
 
-    public RoutingInformationProtocolIndicationPDU(short ripNode, int[] distanceVector) {
+    public RoutingInformationProtocolIndicationPDU(short ripNode, int[] distanceVector) throws InvalidRIPPDUException {
         this.ripNode = ripNode;
         this.distanceVector = distanceVector;
 
@@ -17,6 +17,38 @@ public class RoutingInformationProtocolIndicationPDU {
                 this.message += ":" + distanceVector[i];
             }
         }
+
+        this.validatePDU();
+    }
+
+    /**
+     * Valida a PDU
+     * 
+     * @throws InvalidRIPPDUException
+     */
+    private void validatePDU() throws InvalidRIPPDUException {
+        if (!this.message.startsWith("RIPIND")) {
+            throw new InvalidRIPPDUException("Mensagem não inicia com RIPIND");
+        }
+
+        if (this.ripNode < 1 || this.ripNode > 15) {
+            throw new InvalidRIPPDUException("Nó inválido");
+        }
+
+        if (!isByteSizeValid()) {
+            throw new InvalidRIPPDUException("Tamanho da PDU excede 512 bytes");
+        }
+    }
+
+    /**
+     * Verifica se o tamanho da PDU em bytes é válido
+     * 
+     * @return se o tamanho é válido
+     */
+    private boolean isByteSizeValid() {
+        byte[] bytes = this.message.getBytes();
+
+        return bytes.length <= 512;
     }
 
     public RoutingInformationProtocolIndicationPDU(String message) throws InvalidRIPPDUException {
