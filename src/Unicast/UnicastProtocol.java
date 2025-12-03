@@ -192,10 +192,6 @@ public class UnicastProtocol implements UnicastServiceInterface, Runnable {
             inetAddress = destinationAddress.getInetAddress();
             portNumber = destinationAddress.getPortNumber();
 
-            System.out.println("[SENDING...]: from " + this.ucsapId + " sending message to " + inetAddress.toString()
-                    + ":" + portNumber
-                    + ". Content: " + unicastPDU.getMessage());
-
             datagramPacket = new DatagramPacket(
                     unicastPDU.getMessageBytes(),
                     unicastPDU.getMessageBytes().length,
