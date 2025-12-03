@@ -80,6 +80,12 @@ public class Manager implements RoutingInformationProtocolStrategy {
         }
     }
 
+    /**
+     * Manipula mensagens RIPNTF recebidas.
+     * 
+     * @param source
+     * @param words
+     */
     private void handleRipNtf(short source, String[] words) {
         // Validação de segurança: só aceita se vier do nó que estamos aguardando
         if (source != targetNode)
@@ -91,6 +97,9 @@ public class Manager implements RoutingInformationProtocolStrategy {
             currentState = ManagerStateEnum.Idle;
 
             // Notifica aplicação: linkCostIndication(nodeA, nodeB, cost)
+            for (int i = 0; i < words.length; i++)
+                System.out.print(words[i] + " ");
+            System.out.println();
             context.notifyLinkCostIndication(
                     Short.parseShort(words[1]),
                     Short.parseShort(words[2]),
@@ -123,6 +132,12 @@ public class Manager implements RoutingInformationProtocolStrategy {
         }
     }
 
+    /**
+     * Manipula mensagens RIPRSP recebidas.
+     * 
+     * @param source
+     * @param message
+     */
     private void handleRipRsp(short source, String message) {
         if (source != targetNode)
             return;
@@ -198,6 +213,9 @@ public class Manager implements RoutingInformationProtocolStrategy {
 
     /**
      * Envia a mensagem via Unicast e inicia o timer de retransmissão.
+     * 
+     * @param dest nó destino
+     * @param msg  mensagem a ser enviada
      */
     private void sendAndStartTimer(short dest, String msg) {
         // Envia a primeira vez
@@ -207,6 +225,12 @@ public class Manager implements RoutingInformationProtocolStrategy {
         startRetransmissionTimer(dest, msg);
     }
 
+    /**
+     * Inicia o timer de retransmissão.
+     * 
+     * @param node nó destino
+     * @param pdu  mensagem PDU enviada
+     */
     private void startRetransmissionTimer(short node, String pdu) {
         // Cancela timer anterior para evitar duplicidade
         stopRetransmissionTimer();
@@ -223,6 +247,9 @@ public class Manager implements RoutingInformationProtocolStrategy {
         }, TIMEOUT_SECONDS, TimeUnit.SECONDS);
     }
 
+    /**
+     * Para o timer de retransmissão.
+     */
     private void stopRetransmissionTimer() {
         if (retransmissionTask != null && !retransmissionTask.isDone()) {
             retransmissionTask.cancel(false);

@@ -33,7 +33,7 @@ public class Node implements RoutingInformationProtocolStrategy {
     private short[] neighboursUcsapId;
 
     /** Custo direto para os vizinhos (Topologia Física). */
-    private int[] custoParaVizinho; // Pode ser otimizado para um Map<Short, Integer>
+    private int[] custoParaVizinho;
 
     /** Armazena o estado atual da máquina de estados do nó. */
     private NodeStateEnum nodeState = NodeStateEnum.Idle;
@@ -183,10 +183,11 @@ public class Node implements RoutingInformationProtocolStrategy {
             RoutingInformationProtocolSetPDU receivedPDU = new RoutingInformationProtocolSetPDU(message);
 
             int newCost = receivedPDU.getCost();
-            int currentCost = getCustoEnlace(source);
+            int currentCost = getCustoEnlace(receivedPDU.getRipNodeB());
 
             if (currentCost == -1 && newCost != -1) {
-                System.out.println("[ERRO] Tentativa de criar enlace inexistente.");
+                System.out.println("[ERRO] Tentativa de criar enlace inexistente. Custo atual: " + currentCost
+                        + ", Novo Custo: " + newCost);
                 this.nodeState = NodeStateEnum.Idle;
                 return;
             }

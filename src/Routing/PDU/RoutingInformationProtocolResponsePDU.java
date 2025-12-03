@@ -12,10 +12,10 @@ public class RoutingInformationProtocolResponsePDU {
         this.message = "RIPRSP " + ripNode + " ";
         for (int i = 0; i < distanceTable.length; i++) {
             for (int j = 0; j < distanceTable[i].length; j++) {
-                if (i == 0) {
-                    this.message += distanceTable[i];
+                if (j == 0) {
+                    this.message += distanceTable[i][j];
                 } else {
-                    this.message += ":" + distanceTable[i];
+                    this.message += ":" + distanceTable[i][j];
                 }
             }
 

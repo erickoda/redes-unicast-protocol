@@ -10,7 +10,7 @@ public class RoutingInformationProtocolNotificationPDU {
         this.ripNodeA = ripNodeA;
         this.ripNodeB = ripNodeB;
         this.cost = cost;
-        this.message = "RIPNTF " + ripNodeA + " " + ripNodeB;
+        this.message = "RIPNTF " + ripNodeA + " " + ripNodeB + " " + cost;
     }
 
     public String getMessage() {

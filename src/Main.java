@@ -12,16 +12,25 @@ class Main {
     public static void main(String[] args) throws Exception {
         UnicastAddressSingleton unicastAddressSingleton = UnicastAddressSingleton.getInstance();
         ArrayList<RoutingInformationProtocol> nodes = new ArrayList<RoutingInformationProtocol>();
-        RoutingManagementApplication routingManagementApplication;
+        RoutingManagementApplication routingManagementApplication = null;
 
         for (UnicastAddress address : unicastAddressSingleton.getUnicastAddresses()) {
-            RoutingInformationProtocol rip = new RoutingInformationProtocol(address.getUcsapId(), 5);
+            RoutingInformationProtocol rip = new RoutingInformationProtocol(address.getUcsapId(), 10);
             if (address.getUcsapId() == 0) {
                 routingManagementApplication = new RoutingManagementApplication(rip);
+                rip.setManagementInterface(routingManagementApplication);
             } else {
                 nodes.add(rip);
             }
             Thread.sleep(500);
+        }
+
+        if (routingManagementApplication != null) {
+            // routingManagementApplication.getRoutingManagement().setLinkCost((short) 1,
+            // (short) 2, 10);
+            // routingManagementApplication.getRoutingManagement().getLinkCost((short) 2,
+            // (short) 3);
+            routingManagementApplication.getRoutingManagement().getDistanceTable((short) 1);
         }
     }
 }
