@@ -96,6 +96,7 @@ public class Main {
 
                     case "exit":
                     case "quit":
+                        scanner.close();
                         exitProgram();
                         break;
 
