@@ -62,6 +62,9 @@ public class Manager implements RoutingInformationProtocolStrategy {
 
     /**
      * Processa mensagens recebidas (RIPNTF, RIPRSP) conforme máquina de estados.
+     * 
+     * @param source  nó fonte da mensagem
+     * @param message conteúdo da mensagem
      */
     @Override
     public void handleMessage(short source, String message) {
@@ -162,6 +165,14 @@ public class Manager implements RoutingInformationProtocolStrategy {
         }
     }
 
+    /**
+     * Solicita o custo do link entre dois nós.
+     * 
+     * @param nodeA O ID do nó A.
+     * @param nodeB O ID do nó B.
+     * 
+     * @return true se a requisição foi enviada com sucesso, false caso contrário.
+     */
     @Override
     public boolean executeGetLinkCost(short nodeA, short nodeB) {
         if (currentState != ManagerStateEnum.Idle) {
@@ -184,6 +195,14 @@ public class Manager implements RoutingInformationProtocolStrategy {
 
     }
 
+    /**
+     * Altera o custo do link entre dois nós.
+     * 
+     * @param nodeA O ID do nó A.
+     * @param nodeB O ID do nó B.
+     * 
+     * @return true se a requisição foi enviada com sucesso, false caso contrário.
+     */
     @Override
     public boolean executeSetLinkCost(short nodeA, short nodeB, int cost) {
         if (currentState != ManagerStateEnum.Idle) {
@@ -212,6 +231,13 @@ public class Manager implements RoutingInformationProtocolStrategy {
 
     }
 
+    /**
+     * Solicita a tabela de distância de um nó.
+     * 
+     * @param nodeA O ID do nó.
+     * 
+     * @return true se a requisição foi enviada com sucesso, false caso contrário.
+     */
     @Override
     public boolean executeGetDistanceTable(short node) {
         if (currentState != ManagerStateEnum.Idle) {

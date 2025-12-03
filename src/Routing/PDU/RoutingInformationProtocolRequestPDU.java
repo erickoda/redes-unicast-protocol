@@ -1,14 +1,26 @@
 package src.Routing.PDU;
 
 public class RoutingInformationProtocolRequestPDU {
+    /** Mensagem da PDU */
     private String message = "";
 
+    /**
+     * Construtor para criar a PDU de requisição
+     * 
+     * @throws InvalidRIPPDUException
+     */
     public RoutingInformationProtocolRequestPDU() throws InvalidRIPPDUException {
         this.message = "RIPRQT";
 
         this.validatePDU();
     }
 
+    /**
+     * Construtor para criar a PDU de requisição a partir da mensagem
+     * 
+     * @param message
+     * @throws InvalidRIPPDUException
+     */
     public RoutingInformationProtocolRequestPDU(String message) throws InvalidRIPPDUException {
         this.message = message;
         this.validatePDU();
@@ -40,6 +52,11 @@ public class RoutingInformationProtocolRequestPDU {
         return bytes.length <= 512;
     }
 
+    /**
+     * Pega a mensagem da PDU
+     * 
+     * @return
+     */
     public String getMessage() {
         return message;
     }

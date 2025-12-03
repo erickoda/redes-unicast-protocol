@@ -100,16 +100,39 @@ public class RoutingInformationProtocol
         strategy.handleMessage(source, message);
     }
 
+    /**
+     * Solicita a Tabela de Distância de um nó específico.
+     * 
+     * @param node O ID do nó.
+     * @return true se a requisição foi enviada com sucesso, false caso contrário.
+     */
     @Override
     public boolean getDistanceTable(short node) {
         return strategy.executeGetDistanceTable(node);
     }
 
+    /**
+     * Solicita o custo do link entre dois nós.
+     * 
+     * @param nodeA O ID do nó A.
+     * @param nodeB O ID do nó B.
+     * 
+     * @return true se a requisição foi enviada com sucesso, false caso contrário.
+     */
     @Override
     public boolean getLinkCost(short nodeA, short nodeB) {
         return strategy.executeGetLinkCost(nodeA, nodeB);
     }
 
+    /**
+     * Altera o custo do link entre dois nós.
+     * 
+     * @param nodeA O ID do nó A.
+     * @param nodeB O ID do nó B.
+     * @param cost  O novo custo do link.
+     * 
+     * @return true se a requisição foi enviada com sucesso, false caso contrário.
+     */
     @Override
     public boolean setLinkCost(short nodeA, short nodeB, int cost) {
         return strategy.executeSetLinkCost(nodeA, nodeB, cost);

@@ -1,10 +1,22 @@
 package src.Routing.PDU;
 
 public class RoutingInformationProtocolResponsePDU {
+    /** Nó */
     private short ripNode;
+
+    /** Tabela de Distância */
     private int[][] distanceTable;
+
+    /** Mensagem da PDU */
     private String message = "";
 
+    /**
+     * Construtor para criar a PDU a partir do nó e da tabela de distância
+     * 
+     * @param ripNode
+     * @param distanceTable
+     * @throws InvalidRIPPDUException
+     */
     public RoutingInformationProtocolResponsePDU(short ripNode, int[][] distanceTable) throws InvalidRIPPDUException {
         this.ripNode = ripNode;
         this.distanceTable = distanceTable;
@@ -27,6 +39,12 @@ public class RoutingInformationProtocolResponsePDU {
         this.validatePDU();
     }
 
+    /**
+     * Construtor para criar a PDU a partir da mensagem
+     * 
+     * @param message
+     * @throws InvalidRIPPDUException
+     */
     public RoutingInformationProtocolResponsePDU(String message) throws InvalidRIPPDUException {
         this.message = message;
         String[] words = message.split(" ");
@@ -77,14 +95,29 @@ public class RoutingInformationProtocolResponsePDU {
         return bytes.length <= 512;
     }
 
+    /**
+     * Pega a mensagem da PDU
+     * 
+     * @return
+     */
     public String getMessage() {
         return this.message;
     }
 
+    /**
+     * Pega o nó
+     * 
+     * @return
+     */
     public short getRipNode() {
         return ripNode;
     }
 
+    /**
+     * Pega a tabela de distância
+     * 
+     * @return
+     */
     public int[][] getDistanceTable() {
         return distanceTable;
     }

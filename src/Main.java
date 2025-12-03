@@ -53,6 +53,8 @@ public class Main {
 
     /**
      * Menu interativo para testar as funcionalidades do Gerente.
+     * 
+     * @param app A aplicação de gerenciamento de roteamento.
      */
     private static void runInteractiveCLI(RoutingManagementApplication app) {
         Scanner scanner = new Scanner(System.in);
@@ -109,6 +111,9 @@ public class Main {
         }
     }
 
+    /**
+     * Imprime a ajuda com os comandos disponíveis.
+     */
     private static void printHelp() {
         System.out.println("\n--- Comandos Disponíveis ---");
         System.out.println("  table <id>           : Solicita a Tabela de Distância do nó (Ex: table 1)");
@@ -118,6 +123,13 @@ public class Main {
         System.out.println("----------------------------");
     }
 
+    /**
+     * Solicita a Tabela de Distância de um nó específico.
+     * 
+     * @param parts
+     * @param manager
+     * @throws NumberFormatException
+     */
     private static void executeGetTable(String[] parts, RoutingProtocolManagementInterface manager)
             throws NumberFormatException {
         if (parts.length < 2) {
@@ -132,6 +144,13 @@ public class Main {
         }
     }
 
+    /**
+     * Solicita o custo do link entre dois nós.
+     * 
+     * @param parts
+     * @param manager
+     * @throws NumberFormatException
+     */
     private static void executeGetCost(String[] parts, RoutingProtocolManagementInterface manager)
             throws NumberFormatException {
         if (parts.length < 3) {
@@ -144,6 +163,13 @@ public class Main {
         }
     }
 
+    /**
+     * Altera o custo do link entre dois nós.
+     * 
+     * @param parts
+     * @param manager
+     * @throws NumberFormatException
+     */
     private static void executeSetCost(String[] parts, RoutingProtocolManagementInterface manager)
             throws NumberFormatException {
         if (parts.length < 4) {

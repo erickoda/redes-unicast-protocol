@@ -1,11 +1,26 @@
 package src.Routing.PDU;
 
 public class RoutingInformationProtocolSetPDU {
+    /** Node A */
     private short ripNodeA;
+
+    /** Node B */
     private short ripNodeB;
+
+    /** Custo do Enlace entre os Nodes */
     private int cost;
+
+    /** Mensage da PDU */
     private String message = "";
 
+    /**
+     * Construtor para criar a PDU a partir dos nós e do custo
+     * 
+     * @param ripNodeA
+     * @param ripNodeB
+     * @param cost
+     * @throws InvalidRIPPDUException
+     */
     public RoutingInformationProtocolSetPDU(short ripNodeA, short ripNodeB, int cost) throws InvalidRIPPDUException {
         this.ripNodeA = ripNodeA;
         this.ripNodeB = ripNodeB;
@@ -15,6 +30,12 @@ public class RoutingInformationProtocolSetPDU {
         this.validatePDU();
     }
 
+    /**
+     * Construtor para criar a PDU a partir da mensagem
+     * 
+     * @param ripset
+     * @throws InvalidRIPPDUException
+     */
     public RoutingInformationProtocolSetPDU(String ripset) throws InvalidRIPPDUException {
         String[] words = ripset.split(" ");
         this.message = ripset;
@@ -64,18 +85,38 @@ public class RoutingInformationProtocolSetPDU {
         return bytes.length <= 512;
     }
 
+    /**
+     * Pega a mensagem da PDU
+     * 
+     * @return
+     */
     public String getMessage() {
         return message;
     }
 
+    /**
+     * Pega o nó A
+     * 
+     * @return
+     */
     public short getRipNodeA() {
         return ripNodeA;
     }
 
+    /**
+     * Pega o nó B
+     * 
+     * @return
+     */
     public short getRipNodeB() {
         return ripNodeB;
     }
 
+    /**
+     * Pega o custo do enlace entre os nodes
+     * 
+     * @return
+     */
     public int getCost() {
         return cost;
     }

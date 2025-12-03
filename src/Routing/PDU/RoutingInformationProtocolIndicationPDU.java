@@ -1,10 +1,22 @@
 package src.Routing.PDU;
 
 public class RoutingInformationProtocolIndicationPDU {
+    /** Nó */
     private int ripNode;
+
+    /** Vetor de Distância */
     private int[] distanceVector;
+
+    /** Mensagem da PDU */
     private String message = "";
 
+    /**
+     * Construtor para criar a PDU a partir do nó e do vetor de distância
+     * 
+     * @param ripNode
+     * @param distanceVector
+     * @throws InvalidRIPPDUException
+     */
     public RoutingInformationProtocolIndicationPDU(short ripNode, int[] distanceVector) throws InvalidRIPPDUException {
         this.ripNode = ripNode;
         this.distanceVector = distanceVector;
@@ -61,11 +73,10 @@ public class RoutingInformationProtocolIndicationPDU {
             throw new InvalidRIPPDUException("Mensagem inválida para RIPIND: " + message);
         }
 
-        // 2. Extrai o ID do nó
+        // Extrai o ID do nó
         this.ripNode = Integer.parseInt(parts[1]);
 
-        // 3. Extrai e processa o vetor de distância
-        // Quebra a parte do vetor pelos dois pontos ":"
+        // Extrai e processa o vetor de distância
         String[] vectorParts = parts[2].split(":");
 
         this.distanceVector = new int[vectorParts.length];
@@ -74,7 +85,6 @@ public class RoutingInformationProtocolIndicationPDU {
             try {
                 this.distanceVector[i] = Integer.parseInt(vectorParts[i]);
             } catch (NumberFormatException e) {
-                // Se houver algum erro de formatação, define como infinito
                 this.distanceVector[i] = -1;
             }
         }

@@ -1,8 +1,17 @@
 package src.Routing.PDU;
 
 public class RoutingInformationProtocolNotificationPDU {
+    /** Mensage da PDU */
     private String message = "";
 
+    /**
+     * Construtor para criar a PDU a partir dos nós e do custo
+     * 
+     * @param ripNodeA
+     * @param ripNodeB
+     * @param cost
+     * @throws InvalidRIPPDUException
+     */
     public RoutingInformationProtocolNotificationPDU(short ripNodeA, short ripNodeB, int cost)
             throws InvalidRIPPDUException {
         this.message = "RIPNTF " + ripNodeA + " " + ripNodeB + " " + cost;
@@ -36,6 +45,11 @@ public class RoutingInformationProtocolNotificationPDU {
         return bytes.length <= 512;
     }
 
+    /**
+     * Pega a mensagem da PDU
+     * 
+     * @return mensagem da PDU
+     */
     public String getMessage() {
         return message;
     }
