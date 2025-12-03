@@ -30,6 +30,7 @@ public class RoutingInformationProtocolResponsePDU {
     public RoutingInformationProtocolResponsePDU(String message) throws InvalidRIPPDUException {
         this.message = message;
         String[] words = message.split(" ");
+        this.ripNode = Short.parseShort(words[1]);
         this.distanceTable = new int[words.length - 2][];
 
         for (int i = 2; i < words.length; i++) {
@@ -57,7 +58,7 @@ public class RoutingInformationProtocolResponsePDU {
         }
 
         if (this.ripNode < 1 || this.ripNode > 15) {
-            throw new InvalidRIPPDUException("Nó inválido");
+            throw new InvalidRIPPDUException("Nó " + this.ripNode + " inválido");
         }
 
         if (!isByteSizeValid()) {

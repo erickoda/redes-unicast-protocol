@@ -261,10 +261,8 @@ public class Node implements RoutingInformationProtocolStrategy {
             // Verifica se a PDU é válida
             new RoutingInformationProtocolRequestPDU(message);
 
-            short manager = 0;
-
             RoutingInformationProtocolResponsePDU sendPDU = new RoutingInformationProtocolResponsePDU(
-                    manager, this.distanceTable);
+                    this.ucsapId, this.distanceTable);
 
             this.routingInformationProtocol.getUnicastService().UPDataReq(source, sendPDU.getMessage());
         }

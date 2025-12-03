@@ -30,7 +30,7 @@ class Main {
             // (short) 2, 10);
             // routingManagementApplication.getRoutingManagement().getLinkCost((short) 2,
             // (short) 3);
-            routingManagementApplication.getRoutingManagement().getDistanceTable((short) 1);
+            routingManagementApplication.getRoutingManagement().getDistanceTable((short) 2);
         }
     }
 }
