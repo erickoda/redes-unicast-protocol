@@ -8,14 +8,27 @@ Execute o arquivo .jar e escolha um ou mais comandos descritos pelo print que se
 
 ## Generate .jar
 ```bash
-mkdir -p bin
+# Gera o .jar para o gerente
+mkdir -p binManager
 
-javac -d bin -sourcepath src src/Main.java src/*.java src/Routing/*.java src/Routing/PDU/*.java src/Unicast/*.java src/Unicast/Exception/*.java
+javac -d binManager -sourcepath src src/Main.java src/*.java src/Routing/*.java src/Routing/PDU/*.java src/Unicast/*.java src/Unicast/Exception/*.java
 
-jar cvfm RedesProjeto.jar manifest.txt -C bin .
+jar cvfm Manager.jar manifest_manager.txt -C binManager .
 
 # Pode ser necessário usar sudo para rodar o .jar
-java -jar RedesProjeto.jar
+java -jar Manager.jar
+```
+
+```bash
+# Gera o .jar para o nó
+mkdir -p binNode
+
+javac -d binNode -sourcepath src src/Main.java src/*.java src/Routing/*.java src/Routing/PDU/*.java src/Unicast/*.java src/Unicast/Exception/*.java
+
+jar cvfm Node.jar manifest_node.txt -C binNode .
+
+# Pode ser necessário usar sudo para rodar o .jar
+java -jar Node.jar
 ```
 
 ## Generate javadocs
