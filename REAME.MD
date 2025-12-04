@@ -11,7 +11,7 @@ Execute o arquivo .jar e escolha um ou mais comandos descritos pelo print que se
 # Gera o .jar para o gerente
 mkdir -p binManager
 
-javac -d binManager -sourcepath src src/Main.java src/*.java src/Routing/*.java src/Routing/PDU/*.java src/Unicast/*.java src/Unicast/Exception/*.java
+javac -d binManager -sourcepath src src/*.java src/Routing/*.java src/Routing/PDU/*.java src/Unicast/*.java src/Unicast/Exception/*.java
 
 jar cvfm Manager.jar manifest_manager.txt -C binManager .
 
@@ -23,7 +23,7 @@ java -jar Manager.jar
 # Gera o .jar para o nó
 mkdir -p binNode
 
-javac -d binNode -sourcepath src src/Main.java src/*.java src/Routing/*.java src/Routing/PDU/*.java src/Unicast/*.java src/Unicast/Exception/*.java
+javac -d binNode -sourcepath src src/*.java src/Routing/*.java src/Routing/PDU/*.java src/Unicast/*.java src/Unicast/Exception/*.java
 
 jar cvfm Node.jar manifest_node.txt -C binNode .
 
