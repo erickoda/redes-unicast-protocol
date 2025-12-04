@@ -8,7 +8,7 @@ package src.Routing.PDU;
  */
 public class RoutingInformationProtocolIndicationPDU {
     /** Nó */
-    private int ripNode;
+    private short ripNode;
 
     /** Vetor de Distância */
     private int[] distanceVector;
@@ -87,7 +87,7 @@ public class RoutingInformationProtocolIndicationPDU {
         }
 
         // Extrai o ID do nó
-        this.ripNode = Integer.parseInt(parts[1]);
+        this.ripNode = Short.parseShort(parts[1]);
 
         // Extrai e processa o vetor de distância
         String[] vectorParts = parts[2].split(":");
