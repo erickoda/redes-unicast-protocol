@@ -1,6 +1,5 @@
 package src;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import src.Routing.RoutingInformationProtocol;
@@ -10,53 +9,45 @@ import src.Unicast.UnicastAddress;
 import src.Unicast.UnicastAddressSingleton;
 
 /**
- * Classe Principal para a simulação do sistema de roteamento.
+ * Classe principal para iniciar o Gerente na rede.
  */
-public class Main {
+public class MainManager {
 
     /**
-     * Main do sistema de roteamento.
+     * Carrega o Gerente.
      * 
      * @param args argumento por linha de comando (não utilizado).
      */
     public static void main(String[] args) {
-        try {
-            System.out.println("=== Inicializando Sistema de Roteamento ===");
 
-            // Carrega endereços
-            UnicastAddressSingleton unicastAddressSingleton = UnicastAddressSingleton.getInstance();
-            ArrayList<RoutingInformationProtocol> nodes = new ArrayList<>();
-            RoutingManagementApplication app = null;
+        System.out.println("=== Inicializando Gerente ===");
 
-            // Instancia e inicia todos os nós e o gerente
-            for (UnicastAddress address : unicastAddressSingleton.getUnicastAddresses()) {
-                short id = address.getUcsapId();
-                System.out.println("Iniciando entidade ID: " + id);
+        // Carrega endereços
+        UnicastAddressSingleton unicastAddressSingleton = UnicastAddressSingleton.getInstance();
+        RoutingManagementApplication app = null;
 
+        // Busca o endereço do gerente
+        for (UnicastAddress address : unicastAddressSingleton.getUnicastAddresses()) {
+            short id = address.getUcsapId();
+            System.out.println("Iniciando entidade ID: " + id);
+
+            if (id == 0) {
+                // Configura o Gerente
                 RoutingInformationProtocol rip = new RoutingInformationProtocol(id, 10);
-
-                if (id == 0) {
-                    // Configura o Gerente e a Aplicação de Gerência
-                    app = new RoutingManagementApplication(rip);
-                    rip.setManagementInterface(app);
-                } else {
-                    nodes.add(rip);
-                }
-
-                Thread.sleep(200);
+                app = new RoutingManagementApplication(rip);
+                rip.setManagementInterface(app);
+                break;
             }
-
-            if (app == null) {
-                System.err.println("[ERRO] Gerente (ID 0) não encontrado no arquivo de configuração!");
-                System.exit(1);
-            }
-
-            // Interface Interativa (CLI)
-            runInteractiveCLI(app);
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
+        if (app == null) {
+            System.err.println("[ERRO] Gerente (ID 0) não encontrado no arquivo de configuração!");
+            System.exit(1);
+        }
+
+        // Interface Interativa (CLI)
+        runInteractiveCLI(app);
+
     }
 
     /**
@@ -195,4 +186,5 @@ public class Main {
         System.out.println("Encerrando o sistema...");
         System.exit(0);
     }
+
 }
